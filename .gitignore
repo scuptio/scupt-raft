@@ -15,3 +15,7 @@ Cargo.lock
 
 # gcov
 *.profraw
+
+# TLC model checker
+*.toolbox
+

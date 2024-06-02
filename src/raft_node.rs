@@ -29,7 +29,7 @@ use crate::storage::Storage;
 
 pub struct RaftNode<T: MsgTrait + 'static> {
     node_id: NID,
-    dtm_testing: bool,
+    _dtm_testing: bool,
     node_peer_addrs: Vec<NodeAddr>,
     storage: Storage<T>,
     sender: Arc<dyn SenderAsync<RaftMessage<T>>>,
@@ -67,7 +67,7 @@ impl<T: MsgTrait + 'static> RaftNode<T> {
 
         Ok(RaftNode {
             node_id,
-            dtm_testing: enable_testing,
+            _dtm_testing: enable_testing,
             node_peer_addrs: node_peer_addr,
             storage,
             sender,
