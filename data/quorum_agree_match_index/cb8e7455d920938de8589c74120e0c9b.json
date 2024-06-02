@@ -1,0 +1,49 @@
+[
+  {
+    "leader_nid": 1,
+    "leader_last_index": 4,
+    "follower_match_index": {
+      "1": 0,
+      "2": 9
+    },
+    "conf_committed": {
+      "conf_version": {
+        "term": 0,
+        "version": 0,
+        "index": 0
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    "conf_new": {
+      "conf_version": {
+        "term": 0,
+        "version": 0,
+        "index": 0
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3
+        ]
+      }
+    }
+  },
+  4
+]

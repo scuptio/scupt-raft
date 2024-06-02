@@ -1,0 +1,14 @@
+[
+  {
+    "leader_nid": 1,
+    "nid_set": [
+      1,
+      2,
+      3
+    ],
+    "leader_term": 0,
+    "leader_conf_commit_index": 0,
+    "follower_term_and_committed_index": {}
+  },
+  false
+]

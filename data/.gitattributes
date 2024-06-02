@@ -1,0 +1,4 @@
+quorum_agree_match_index/ -diff
+quorum_agree_agree_vote/ -diff
+quorum_agree_check_conf_term_version/ -diff
+quorum_agree_check_term_commit_index/ -diff
