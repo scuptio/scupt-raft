@@ -288,7 +288,7 @@ pub mod tests {
     }
 
 
-    pub fn test_raft_gut(
+    pub fn dtm_test_raft(
         from_db: InputType,
         port_low: u16,
         num_nodes: u32,
