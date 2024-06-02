@@ -166,11 +166,7 @@ pub mod tests {
             let state = guard.clone();
             Self::check_invariants(state.node_state, state.committed_index_term);
         }
-        pub fn reset_committed(cluster_name: String) {
-            let s = GlobalState::global_state(cluster_name);
-            let mut guard = s.lock().unwrap();
-            guard.committed_index_term.clear();
-        }
+
 
         pub fn set_and_check_invariants<T: MsgTrait + 'static>(
             cluster_name: String,
@@ -254,7 +250,7 @@ pub mod tests {
 
 
                 let opt = committed_index_term.get(&state.snapshot.end_index);
-                if let Some(t) = opt {} else {
+                if let Some(_t) = opt {} else {
                     // assert!(false, "commit <<index, term>> must be consistency");
                 }
 

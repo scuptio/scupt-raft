@@ -20,14 +20,21 @@ mod tests {
             for vec in [tla_action_seq.actions(), tla_action_seq.states()] {
                 for a in vec {
                     let j = a.to_action_json()?;
-                    let _a: ActionMessage<RaftMessage<u64>> = serde_json::from_str(j.to_serde_json_string().to_string().as_str()).unwrap();
-                    trace!("{:?}", _a);
+                    let s = j.to_serde_json_string().to_string();
+                    let _r: serde_json::Result<ActionMessage<RaftMessage<u64>>> = serde_json::from_str(s.as_str());
+                    let a = match _r {
+                        Ok(a) => { a }
+                        Err(e) => {
+                            panic!("error json {} {}", s, e);
+                        }
+                    };
+                    trace!("{:?}", a);
                 }
             }
             Ok(())
         };
-        // todo!
-        //let path = test_data_path("raft_abstract_action.db".to_string()).unwrap();
-        //read_actions(path.to_string(), &map, &f).unwrap();
+
+        let path = test_data_path("raft_action.db".to_string()).unwrap();
+        read_actions(path.to_string(), &map, &f).unwrap();
     }
 }

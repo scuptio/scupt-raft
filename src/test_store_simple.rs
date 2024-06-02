@@ -77,9 +77,7 @@ pub mod tests {
             };
             let log = todo!();
             let (term, voted_for) = self.inner.get_term_voted()?;
-            InvariantChecker::reset_committed(
-                self.inner.cluster_name.clone()
-            );
+
             InvariantChecker::set_and_check_invariants(
                 self.inner.cluster_name.clone(),
                 self.inner.path.clone(),
@@ -213,7 +211,7 @@ pub mod tests {
             self.inner.read_index_term()
         }
 
-        async fn read_snapshot_value(&self, index: u64, limit: Option<u64>) -> Res<Vec<LogEntry<T>>> {
+        async fn read_snapshot_value(&self, _index: u64, _limit: Option<u64>) -> Res<Vec<LogEntry<T>>> {
             self.read_snapshot_value()
         }
 
@@ -280,7 +278,7 @@ pub mod tests {
             }
 
             let mut vec = vec![];
-            for (k, v) in values {
+            for (_k, v) in values {
                 vec.push(v);
             }
             // * remove all log entries in log
@@ -388,7 +386,7 @@ pub mod tests {
         async fn apply_snapshot(
             &self, _id: String,
             values: Vec<LogEntry<T>>,
-            write_opt: WriteSnapshotOpt,
+            _write_opt: WriteSnapshotOpt,
         ) -> Res<Option<Vec<u8>>> {
             let truncate_left = None;
             let truncate_right = None;

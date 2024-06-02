@@ -53,13 +53,7 @@ pub mod tests {
                 cond: Arc::new(Condvar::new()),
             }
         }
-        pub fn stop(&self) {
-            let mut stopped = self.state.lock().unwrap();
-            if *stopped != STOPPED {
-                *stopped = STOPPED;
-                self.cond.notify_all();
-            }
-        }
+
 
         pub fn notify(&self) {
             let mut stopped = self.state.lock().unwrap();
@@ -175,7 +169,7 @@ pub mod tests {
             stop_sink: Option<StopSink>,
         ) -> Res<Self> {
             let mut map_test_node = HashMap::new();
-            for (p, info) in node_peers.iter() {
+            for (p, _info) in node_peers.iter() {
                 let ip_addr = IpAddr::from_str(p.addr.as_str()).unwrap();
                 let sock_addr = SocketAddr::new(ip_addr, p.port);
                 map_test_node.insert(p.node_id, sock_addr);

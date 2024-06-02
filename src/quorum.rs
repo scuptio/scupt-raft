@@ -29,7 +29,7 @@ pub fn quorum_agree_vote(
         return agreed_num * 2 > voter.len();
     } else {
         let voter_new = conf_new.nid_vote.vec();
-        let mut agreed_num_new = _count(voter_new, leader_nid, filter) + 1;
+        let agreed_num_new = _count(voter_new, leader_nid, filter) + 1;
         return agreed_num * 2 > voter.len() && agreed_num_new * 2 > voter_new.len();
     }
 }
