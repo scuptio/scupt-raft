@@ -16,7 +16,7 @@ TLA+ verified Raft consensus
    ```
    git clone https://github.com/scuptio/sedeve-kit.git
    cd sedeve-kit
-   cargo install -path .se
+   cargo install -path .
    ```
 3. [Configure the TLA+ toolbox](https://github.com/scuptio/sedeve-kit/blob/main/doc/configuring_toolbox.md)
    
