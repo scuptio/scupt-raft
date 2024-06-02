@@ -1,0 +1,61 @@
+[package]
+name = "fuzz-raft"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[features]
+_FUZZ_GEN_TEST_JSON_ = []
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4.7"
+serde = "1.0.151"
+serde_json = { version = "1.0.107", features = ["std", "arbitrary_precision", "preserve_order"] }
+
+md5 = "0.7.0"
+[dependencies.scupt-raft]
+path = ".."
+
+
+[[bin]]
+name = "fuzz_quorum_agree_match_index"
+path = "fuzz_targets/fuzz_quorum_agree_match_index.rs"
+test = false
+doc = false
+bench = false
+
+
+
+[[bin]]
+name = "fuzz_quorum_agree_vote"
+path = "fuzz_targets/fuzz_quorum_agree_vote.rs"
+test = false
+doc = false
+bench = false
+
+
+
+[[bin]]
+name = "fuzz_quorum_check_conf_term_version"
+path = "fuzz_targets/fuzz_quorum_check_conf_term_version.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_quorum_check_term_commit_index"
+path = "fuzz_targets/fuzz_quorum_check_term_commit_index.rs"
+test = false
+doc = false
+bench = false
+
+
+[[bin]]
+name = "fuzz_storage"
+path = "fuzz_targets/fuzz_storage.rs"
+test = false
+doc = false
+bench = false

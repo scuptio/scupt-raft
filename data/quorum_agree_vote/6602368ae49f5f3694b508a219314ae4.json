@@ -1,0 +1,74 @@
+[
+  {
+    "leader_nid": 1,
+    "current_term": 10,
+    "follower_vote_granted": {
+      "3": 3,
+      "1": 10,
+      "2": 3
+    },
+    "conf_committed": {
+      "conf_version": {
+        "term": 0,
+        "version": 0,
+        "index": 0
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    },
+    "conf_new": {
+      "conf_version": {
+        "term": 0,
+        "version": 0,
+        "index": 0
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    }
+  },
+  false
+]

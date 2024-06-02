@@ -1,0 +1,23 @@
+[
+  {
+    "leader_nid": 1,
+    "node": [
+      1,
+      2,
+      3
+    ],
+    "leader_term_version": {
+      "term": 3,
+      "version": 1,
+      "index": 1
+    },
+    "follower_conf": {
+      "1": {
+        "term": 3,
+        "version": 1,
+        "index": 1
+      }
+    }
+  },
+  false
+]

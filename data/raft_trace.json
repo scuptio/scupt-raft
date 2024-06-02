@@ -1,0 +1,4156 @@
+[
+  {
+    "Input": {
+      "source": 1,
+      "dest": 1,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 1,
+      "dest": 1,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Setup": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": "RequestVote"
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 2,
+      "dest": 1,
+      "payload": {
+        "VoteReq": {
+          "term": 2,
+          "last_log_index": 0,
+          "last_log_term": 0
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 2,
+      "dest": 3,
+      "payload": {
+        "VoteReq": {
+          "term": 2,
+          "last_log_index": 0,
+          "last_log_term": 0
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 3,
+      "payload": {
+        "VoteReq": {
+          "term": 2,
+          "last_log_index": 0,
+          "last_log_term": 0
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "VoteResp": {
+          "term": 2,
+          "vote_granted": true
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Candidate",
+            "current_term": 2,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "VoteResp": {
+          "term": 2,
+          "vote_granted": true
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 2,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "ClientWriteLog": 100
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 2,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": "AppendLog"
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 2,
+      "dest": 1,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 2,
+          "prev_log_index": 0,
+          "prev_log_term": 0,
+          "log_entries": [
+            {
+              "term": 2,
+              "index": 1,
+              "value": 100
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 2,
+      "dest": 3,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 2,
+          "prev_log_index": 0,
+          "prev_log_term": 0,
+          "log_entries": [
+            {
+              "term": 2,
+              "index": 1,
+              "value": 100
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Follower",
+            "current_term": 2,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 3,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 2,
+          "prev_log_index": 0,
+          "prev_log_term": 0,
+          "log_entries": [
+            {
+              "term": 2,
+              "index": 1,
+              "value": 100
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "AppendResp": {
+          "commit_index": 0,
+          "term": 2,
+          "next_index": 0,
+          "append_success": true,
+          "match_index": 1
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 2,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "AppendResp": {
+          "commit_index": 0,
+          "term": 2,
+          "next_index": 0,
+          "append_success": true,
+          "match_index": 1
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Follower",
+            "current_term": 2,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": "RequestVote"
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 1,
+      "payload": {
+        "VoteReq": {
+          "term": 3,
+          "last_log_index": 1,
+          "last_log_term": 2
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "VoteReq": {
+          "term": 3,
+          "last_log_index": 1,
+          "last_log_term": 2
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 1,
+      "dest": 1,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Follower",
+            "current_term": 1,
+            "log": [],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": null,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 1,
+      "payload": {
+        "VoteReq": {
+          "term": 3,
+          "last_log_index": 1,
+          "last_log_term": 2
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 1,
+      "dest": 3,
+      "payload": {
+        "VoteResp": {
+          "term": 3,
+          "vote_granted": true
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 2,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 1,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 2,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "LogCompaction": 1
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Candidate",
+            "current_term": 3,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 3,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 3
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 1,
+      "dest": 3,
+      "payload": {
+        "VoteResp": {
+          "term": 3,
+          "vote_granted": true
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 3,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 3,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 3
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 3
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 2
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": "AppendLog"
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 1,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 3,
+          "prev_log_index": 1,
+          "prev_log_term": 2,
+          "log_entries": []
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 3,
+          "prev_log_index": 1,
+          "prev_log_term": 2,
+          "log_entries": []
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 2,
+      "dest": 2,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 2,
+            "log": [],
+            "snapshot": {
+              "term": 2,
+              "index": 1,
+              "entries": {
+                "zzz_array": [
+                  {
+                    "term": 2,
+                    "index": 1,
+                    "value": 100
+                  }
+                ]
+              }
+            },
+            "voted_for": 2,
+            "commit_index": 1,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 1
+                },
+                {
+                  "key": 2,
+                  "value": 1
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 1
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 2,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 2,
+      "payload": {
+        "AppendReq": {
+          "commit_index": 0,
+          "term": 3,
+          "prev_log_index": 1,
+          "prev_log_term": 2,
+          "log_entries": []
+        }
+      }
+    }
+  },
+  {
+    "Output": {
+      "source": 2,
+      "dest": 3,
+      "payload": {
+        "AppendResp": {
+          "commit_index": 1,
+          "term": 3,
+          "next_index": 0,
+          "append_success": true,
+          "match_index": 1
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": {
+          "Check": {
+            "role": "Leader",
+            "current_term": 3,
+            "log": [
+              {
+                "term": 2,
+                "index": 1,
+                "value": 100
+              }
+            ],
+            "snapshot": {
+              "term": 0,
+              "index": 0,
+              "entries": {
+                "zzz_array": []
+              }
+            },
+            "voted_for": 3,
+            "commit_index": 0,
+            "conf_committed": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "conf_new": {
+              "nid_vote": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "conf_version": {
+                "term": 1,
+                "index": 1,
+                "version": 1
+              },
+              "nid_log": {
+                "zzz_array": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            "follower_vote_granted": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 3
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 3
+                }
+              ]
+            },
+            "follower_next_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 2
+                },
+                {
+                  "key": 2,
+                  "value": 2
+                },
+                {
+                  "key": 3,
+                  "value": 2
+                }
+              ]
+            },
+            "follower_match_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": 0
+                },
+                {
+                  "key": 2,
+                  "value": 0
+                },
+                {
+                  "key": 3,
+                  "value": 0
+                }
+              ]
+            },
+            "follower_term_commit_index": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "term": 0,
+                    "index": 0
+                  }
+                }
+              ]
+            },
+            "follower_conf": {
+              "zzz_array": [
+                {
+                  "key": 1,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 2,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                },
+                {
+                  "key": 3,
+                  "value": {
+                    "conf_committed": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    },
+                    "conf_new": {
+                      "term": 0,
+                      "index": 0,
+                      "version": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "Input": {
+      "source": 3,
+      "dest": 3,
+      "payload": {
+        "DTMTesting": "Restart"
+      }
+    }
+  }
+]

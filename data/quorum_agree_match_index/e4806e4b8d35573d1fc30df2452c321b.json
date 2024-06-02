@@ -1,0 +1,91 @@
+[
+  {
+    "leader_nid": 1,
+    "leader_last_index": 1,
+    "follower_match_index": {
+      "9": 10,
+      "6": 3,
+      "1": 0,
+      "4": 3,
+      "2": 3,
+      "7": 3,
+      "5": 3,
+      "3": 3,
+      "10": 4,
+      "11": 10,
+      "8": 3
+    },
+    "conf_committed": {
+      "conf_version": {
+        "term": 0,
+        "version": 5,
+        "index": 3
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    },
+    "conf_new": {
+      "conf_version": {
+        "term": 2,
+        "version": 4,
+        "index": 0
+      },
+      "nid_vote": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "nid_log": {
+        "zzz_array": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    }
+  },
+  3
+]
