@@ -26,8 +26,8 @@ PreVoteResponse == "PreVoteResp"
 ApplyReq == "ApplyReq"
 ApplyResp== "ApplyResp"
 
-UpdateConfigReq == "UpdateConfigReq"
-UpdateConfigResp == "UpdateConfigResp"
+UpdateConfigReq == "DTMTesting::UpdateConfReq"
+UpdateConfigResp == "UpdateConfResp"
 
 __ActionInit == "DTMTesting::Setup"
 __ActionCheck == "DTMTesting::Check"

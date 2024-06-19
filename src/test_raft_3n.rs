@@ -11,7 +11,7 @@ mod tests {
     #[test]
     fn test_raft_all_input_from_db() {
         logger_setup("debug");
-        for i in 1..=1 {
+        for i in 1..=1000 {
             let path = format!("raft_trace_3n_{}.db", i);
             let buf = PathBuf::from(test_data_path(path.clone()).unwrap());
             if !buf.exists() {

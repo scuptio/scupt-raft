@@ -34,8 +34,10 @@ pub struct WriteEntriesOpt {
 /// #[derive(Clone, Debug, Arbitrary)]
 pub struct WriteSnapshotOpt {
     /// truncate left side of the snapshot index position
+    /// reserve
+    #[allow(dead_code)]
     pub truncate_left: bool,
-
+    #[allow(dead_code)]
     /// truncate right side of the snapshot index position
     pub truncate_right: bool,
 }

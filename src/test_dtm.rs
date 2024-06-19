@@ -1,6 +1,5 @@
 #[cfg(test)]
 pub mod tests {
-    use std::{fs, thread};
     use std::collections::HashMap;
     use std::net::{IpAddr, SocketAddr};
     use std::path::PathBuf;
@@ -8,17 +7,19 @@ pub mod tests {
     use std::sync::{Arc, Condvar, Mutex};
     use std::thread::sleep;
     use std::time::Duration;
+    use std::{fs, thread};
+    use std::fs::create_dir_all;
 
     use scupt_net::notifier::Notifier;
     use scupt_util::node_id::NID;
     use scupt_util::res::Res;
     use scupt_util::res_of::res_io;
-    use sedeve_kit::{auto_clear, auto_init};
     use sedeve_kit::action::panic::set_panic_hook;
     use sedeve_kit::dtm::action_incoming::ActionIncoming;
     use sedeve_kit::dtm::action_incoming_factory::ActionIncomingFactory;
     use sedeve_kit::dtm::dtm_player::{DTMPlayer, TestOption};
     use sedeve_kit::trace::trace_reader::TraceReader;
+    use sedeve_kit::{auto_clear, auto_init};
     use tracing::info;
     use uuid::Uuid;
 
@@ -46,6 +47,7 @@ pub mod tests {
     const NOTIFIED: u32 = 2u32;
 
     impl StopSink {
+        #[allow(dead_code)]
         pub fn new() -> Self {
             let mutex = Mutex::new(WAITING);
             Self {
@@ -53,7 +55,6 @@ pub mod tests {
                 cond: Arc::new(Condvar::new()),
             }
         }
-
 
         pub fn notify(&self) {
             let mut stopped = self.state.lock().unwrap();
@@ -112,12 +113,23 @@ pub mod tests {
                     "".to_string()
                 }
             };
-            let vec_incoming =
-                TraceReader::read_trace(trace_db_path)?;
+            let vec_incoming = TraceReader::read_trace(trace_db_path)?;
             for (n, p) in vec_incoming.iter().enumerate() {
                 let path = format!("{}_{}_{}", node_db_path, file_stem, n + 1);
-                let t = Self::create(path, simulator_id, simulator_addr,
-                                     test_nodes.clone(), node_peers.clone(), stop_sink.clone())?;
+                create_dir_all(path.clone()).unwrap();
+                let mut trace_json = PathBuf::from(path.as_str());
+                trace_json.push("trace.json");
+                let trace_json = trace_json.to_str().unwrap().to_string();
+                fs::write(trace_json, p.trace_text()?).unwrap();
+
+                let t = Self::create(
+                    path,
+                    simulator_id,
+                    simulator_addr,
+                    test_nodes.clone(),
+                    node_peers.clone(),
+                    stop_sink.clone(),
+                )?;
                 if let Some(s) = &t.opt_stop_sink {
                     if s.is_stopped() {
                         return Ok(());
@@ -154,11 +166,17 @@ pub mod tests {
         ) -> Res<()> {
             let simulator_id = simulator.0.clone();
             let simulator_addr = simulator.1.clone();
-            let t = Self::create(node_db_path, simulator_id, simulator_addr, test_nodes, node_peers, stop_sink)?;
+            let t = Self::create(
+                node_db_path,
+                simulator_id,
+                simulator_addr,
+                test_nodes,
+                node_peers,
+                stop_sink,
+            )?;
             let i = ActionIncomingFactory::action_incoming_from_json_file(trace_file)?;
             t.run_case(i, auto_name.as_str())
         }
-
 
         fn create(
             node_db_path: String,
@@ -196,7 +214,6 @@ pub mod tests {
             Ok(t)
         }
 
-
         fn stop_thread_run(&self) {
             let test = self.clone();
             let _ = thread::Builder::new().spawn(move || {
@@ -206,11 +223,8 @@ pub mod tests {
                 }
             });
         }
-        fn run_case(
-            &self,
-            p: Arc<dyn ActionIncoming>,
-            test_auto_name: &str,
-        ) -> Res<()> {
+
+        fn run_case(&self, p: Arc<dyn ActionIncoming>, test_auto_name: &str) -> Res<()> {
             let id = self.simulator_node_id.clone();
             let addr = self.simulator_address.clone();
             let peer = self.peers.clone();
@@ -219,12 +233,7 @@ pub mod tests {
             let simulator_node_id = self.simulator_node_id;
             let simulate_server = self.simulator_address;
             let addr_str = simulate_server.to_string();
-            auto_init!(
-                    test_auto_name,
-                    0,
-                    simulator_node_id,
-                    addr_str.as_str()
-                );
+            auto_init!(test_auto_name, 0, simulator_node_id, addr_str.as_str());
             let incoming = p.clone();
             let opt = if !test_auto_name.eq(&RAFT_ABSTRACT.to_string()) {
                 TestOption::new()
@@ -252,7 +261,8 @@ pub mod tests {
             };
             let thread = thread::Builder::new()
                 .name("dtm_run_trace".to_string())
-                .spawn(t).unwrap();
+                .spawn(t)
+                .unwrap();
 
             let mut nodes = vec![];
             for (i, (n_addr, info)) in self.test_nodes.iter().enumerate() {
@@ -287,7 +297,6 @@ pub mod tests {
         }
     }
 
-
     pub fn dtm_test_raft(
         from_db: InputType,
         port_low: u16,
@@ -303,7 +312,7 @@ pub mod tests {
         let port_base = port_low;
         let simulator_node = (
             1000 as NID,
-            SocketAddr::new(IpAddr::V4("127.0.0.1".parse().unwrap()), port_base)
+            SocketAddr::new(IpAddr::V4("127.0.0.1".parse().unwrap()), port_base),
         );
         for i in 1..=num_nodes as u16 {
             let node_id = i as NID;
@@ -330,9 +339,9 @@ pub mod tests {
             test_peers.push((peer, info));
         }
 
-
-        let db_path = PathBuf::new().join("/tmp".to_string()).join(
-            format!("test_raft_dtm_{}", Uuid::new_v4().to_string()));
+        let db_path = PathBuf::new()
+            .join("/tmp".to_string())
+            .join(format!("test_raft_dtm_{}", Uuid::new_v4().to_string()));
         let node_db_path = db_path.to_str().unwrap().to_string();
         match from_db {
             InputType::FromDB(p) => {
@@ -340,14 +349,26 @@ pub mod tests {
                 TestRaft::test_db_input_case(
                     path,
                     node_db_path,
-                    simulator_node, test_nodes, test_peers, auto_name, opt_stop_sink).unwrap();
+                    simulator_node,
+                    test_nodes,
+                    test_peers,
+                    auto_name,
+                    opt_stop_sink,
+                )
+                .unwrap();
             }
             InputType::FromJsonFile(p) => {
                 let path = test_data_path(p).unwrap();
                 TestRaft::test_file_input_case(
                     path,
                     node_db_path,
-                    simulator_node, test_nodes, test_peers, auto_name, opt_stop_sink).unwrap();
+                    simulator_node,
+                    test_nodes,
+                    test_peers,
+                    auto_name,
+                    opt_stop_sink,
+                )
+                .unwrap();
             }
         }
     }

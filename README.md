@@ -16,7 +16,7 @@ TLA+ verified Raft consensus
    ```
    git clone https://github.com/scuptio/sedeve-kit.git
    cd sedeve-kit
-   cargo install -path .
+   cargo install --path .
    ```
 3. [Configure the TLA+ toolbox](https://github.com/scuptio/sedeve-kit/blob/main/doc/configuring_toolbox.md)
    
@@ -48,6 +48,17 @@ TLA+ verified Raft consensus
    
    Example [test_raft.rs](src/test_raft_1n.rs)
 
-# Test Coverage
+## Test Coverage
 
 [Test Coverage in Docker](doc/coverage.md)
+
+# Build docker environment
+
+[Dockerfile](docker/Dockerfile)
+
+```shell
+   cd docker
+   docker build .
+```
+
+
