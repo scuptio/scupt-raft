@@ -1241,7 +1241,7 @@ ClientRequest(nid, v , _node_id_set, _check_safety, _enable_action) ==
             actions1 == ActionCheckState(nid)
             actions2 == Action(ActionInput, Message(nid, nid, __ActionClientRequest, v))
         IN SetAction(__action__, actions0, actions1 \o actions2, _enable_action)
-    /\ IF NODE_ID = {nid} THEN
+    /\ IF v_conf_committed[nid].nid_vote \cup v_conf_new[nid].nid_vote = {nid} THEN
           _HandleAdvanceCommitIndex(v_follower_match_index, v_log', v_snapshot,
                  v_conf_committed, v_conf_new,
                  nid, _node_id_set, _check_safety)
