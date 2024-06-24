@@ -1271,8 +1271,8 @@ MsgsUpdateConfReq(
                      \/ (/\ _conf /= NULL
                          /\ (\/ _conf.conf_committed.term /= _v_conf_committed[_source].conf_version.term
                              \/ _conf.conf_committed.version /= _v_conf_committed[_source].conf_version.version
-                             \/ _conf.conf_new.term /= _v_conf_committed[_source].conf_version.term
-                             \/ _conf.conf_new.version /= _v_conf_committed[_source].conf_version.version
+                             \/ _conf.conf_new.term /= _v_conf_new[_source].conf_version.term
+                             \/ _conf.conf_new.version /= _v_conf_new[_source].conf_version.version
                             )
                         )
               } |-> 
@@ -1455,7 +1455,7 @@ LeaderReConfCommit(_nid, _nid_set, _enable_action) ==
                  >>
                     
 _CountLimit(_v_count, _type, _max_limit) ==
-    IF _max_limit > 100 THEN
+    IF _max_limit > 100 THEN \* unlimit for > 100
         /\ _v_count' = _v_count
     ELSE
         (/\ _v_count[_type] < _max_limit
