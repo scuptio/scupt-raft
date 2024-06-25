@@ -363,8 +363,23 @@ _TermCommitIndexQuorumCheck(
                 /\ _follower_term_cindex[j].term = _leader_term
                 /\ _follower_term_cindex[j].index >= _conf_new.conf_version.index
 
-           
 
+_InVoteSet(
+    _node_id,
+    _conf_new,
+    _conf_committed) ==
+    /\ _node_id \in _conf_new.nid_vote 
+    /\ _node_id \in _conf_committed.nid_vote
+    /\ _node_id \in _conf_new.nid_log 
+    /\ _node_id \in _conf_committed.nid_log
+
+_InLogSet(
+    _node_id,
+    _conf_new,
+    _conf_committed) ==
+    /\ _node_id \in _conf_new.nid_log 
+    /\ _node_id \in _conf_committed.nid_log
+        
 _QuorumOverlapped(_node_set1, _node_set2) ==
     \A q1 \in QuorumOf(_node_set1), q2 \in QuorumOf(_node_set2):
         q1 \cap q2 /= {}
@@ -648,8 +663,7 @@ _UnchangedLeaderVar(_nid) ==
 
 \* NODE_ID _node_id times out and starts a new election.
 VoteRequestVote(_node_id, _max_term, _check_safety, _node_id_set, _enable_action) == 
-    /\ _node_id \in v_conf_committed[_node_id].nid_vote
-    /\ _node_id \in v_conf_new[_node_id].nid_vote
+    /\ _InVoteSet(_node_id, v_conf_committed[_node_id], v_conf_new[_node_id])
     /\ TermLE(_node_id, v_current_term, _max_term)
     /\ v_role[_node_id] = Follower
     /\ v_current_term' = [v_current_term EXCEPT ![_node_id] = v_current_term[_node_id] + 1]
@@ -790,6 +804,7 @@ __HandleVoteResponse(i, _from_node, _m, _actions, _check_safety, _node_id, _enab
 \* just 1 because it minimizes atomic regions without loss of generality.
 AppendLogEntries(i, _append_entries_max, _check_safety, _node_id, _enalbe_action) ==
     /\ v_role[i] = Leader
+    /\ _InVoteSet(i, v_conf_new[i], v_conf_committed[i])
     /\ LET node_ids == v_conf_committed[i].nid_log \cup v_conf_new[i].nid_log
            n == _append_entries_max 
            msgs == AppendRequestMessages(
@@ -1045,6 +1060,8 @@ _HandleAppendLogResponse(_node_id, _source, _payload, _node_id_set, _check_safet
 HandleVoteReq(node_id, message, _node_id_set, _enable_action) ==
     /\ message.dest = node_id
     /\ message.name = VoteRequest
+    /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
+    /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
     /\ LET actions1 == ActionCheckState(node_id)
            actions2 == Action(ActionInput, message)
        IN __HandleVoteRequest(message.dest, message.source, message.payload, actions1 \o actions2, _node_id_set, _enable_action)
@@ -1055,6 +1072,8 @@ HandleVoteReq(node_id, message, _node_id_set, _enable_action) ==
 HandleVoteResp(node_id, message, _check_safety, _node_id_set, _enable_action) ==
     /\ message.dest = node_id
     /\ message.name = VoteResponse
+    /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
+    /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
     /\ LET
           actions1 == ActionCheckState(node_id) 
           actions2 == Action(ActionInput, message)
@@ -1067,6 +1086,8 @@ HandleVoteResp(node_id, message, _check_safety, _node_id_set, _enable_action) ==
 HandleAppendLogReq(_node_id, message, _check_safety, _node_id_set, _enable_action) ==
     /\ message.dest = _node_id
     /\ message.name = AppendRequest
+    /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET from_node_id == message.source
            payload == message.payload
            actions0 == ActionSeqSetupAll(_node_id_set)
@@ -1079,6 +1100,8 @@ HandleAppendLogReq(_node_id, message, _check_safety, _node_id_set, _enable_actio
 HandleApplySnapshotReq(_node_id, message, _node_id_set, _enable_action) ==
     /\ message.dest = _node_id
     /\ message.name = ApplyReq
+    /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET from_node_id == message.source
            payload == message.payload
            actions0 == ActionSeqSetupAll(_node_id_set)
@@ -1119,6 +1142,8 @@ HandleApplySnapshotReq(_node_id, message, _node_id_set, _enable_action) ==
 HandleApplySnapshotResp(_node_id, message, _node_id_set, _enable_action) ==
     /\ message.dest = _node_id
     /\ message.name = ApplyResp
+    /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InVoteSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET _source == message.source
            payload == message.payload
        IN /\ payload.term = v_current_term[_node_id]
@@ -1150,6 +1175,8 @@ HandleApplySnapshotResp(_node_id, message, _node_id_set, _enable_action) ==
 HandleAppendLogResp(_node_id, message, _node_id_set, _check_safety, _enable_action) ==
     /\ message.dest = _node_id
     /\ message.name = AppendResponse
+    /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InVoteSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET from_node_id == message.source
            payload == message.payload
            actions0 == ActionSeqSetupAll(_node_id_set)
@@ -1231,6 +1258,7 @@ LogCompaction(nid, _node_id, _enable_action) ==
 
 ClientRequest(nid, v , _node_id_set, _check_safety, _enable_action) ==
     /\ v_role[nid] = Leader
+    /\ _InVoteSet(nid, v_conf_new[nid], v_conf_committed[nid]) 
     /\ ~LogHasValue(v_log[nid], v_snapshot[nid], v)
     /\  LET entry == [
                 index |-> LastLogIndex(v_log[nid], v_snapshot[nid]) + 1,
@@ -1290,6 +1318,7 @@ MsgsUpdateConfReq(
 \* TLA+ {D240422N-LeaderSendUpdateConfToFollower}
 LeaderSendUpdateConfToFollower(_nid, _nid_set, _enalbe_action) ==
     /\ v_role[_nid] = Leader
+    /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid]) 
     /\ LET nid_set == v_conf_committed[_nid].nid_log \cup v_conf_new[_nid].nid_log 
            msgs == MsgsUpdateConfReq(_nid, nid_set, v_current_term, v_conf_committed, v_conf_new, v_follower_conf)
            actions0 == ActionSeqSetupAll(_nid_set)
@@ -1333,6 +1362,8 @@ _UpdateConf(
 HandleUpdateConfReq(_nid, _msg, _nid_set, _enable_action) ==
     /\ _msg.dest = _nid
     /\ _msg.name = UpdateConfigReq
+    /\ _InLogSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
+    /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
     /\(LET conf_committed == _msg.payload.conf_committed
            conf_new == _msg.payload.conf_new
            term == _msg.payload.term
@@ -1364,6 +1395,7 @@ HandleUpdateConfReq(_nid, _msg, _nid_set, _enable_action) ==
 HandleUpdateConfResp(_nid, _msg, _nid_set, _enable_action) ==
     /\ _msg.dest = _nid
     /\ _msg.name = UpdateConfigResp
+    /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
     /\(LET conf_committed == _msg.payload.conf_committed
            conf_new == _msg.payload.conf_new
            term == _msg.payload.term
@@ -1399,6 +1431,7 @@ _ConfigVersionEqual(
 
 \* TLA+ {D240422N-LeaderReConfBegin}
 LeaderReConfBegin(_nid, _nid_vote, _nid_log, _nid_set, _enable_action) ==
+    /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
     /\ v_role[_nid] = Leader
     /\(\/ v_conf_committed[_nid].nid_vote /= _nid_vote
        \/ v_conf_committed[_nid].nid_log /= _nid_log)
@@ -1428,6 +1461,7 @@ LeaderReConfBegin(_nid, _nid_vote, _nid_log, _nid_set, _enable_action) ==
 \* TLA+ {D240423N-LeaderReConfCommit}
 LeaderReConfCommit(_nid, _nid_set, _enable_action) ==
     /\ v_role[_nid] = Leader
+    /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
     /\ ~_ConfigVersionEqual(v_conf_committed[_nid].conf_version, v_conf_new[_nid].conf_version)  \* not comitted yet
         \*old configuration was accepted and ACKed by old quorum set
         \*It is possible for old committed config was not ACKed by old quorum, the newly re-config cannot advance its commitment state

@@ -33,8 +33,12 @@ use crate::storage::Storage;
 use crate::term_index::TermIndex;
 
 struct NodeSet {
-    nid_log: Vec<NID>,
-    nid_vote: Vec<NID>,
+    nid_log_all: Vec<NID>,
+    nid_vote_all: Vec<NID>,
+    committed_log:HashSet<NID>,
+    new_log:HashSet<NID>,
+    committed_vote:HashSet<NID>,
+    new_vote:HashSet<NID>,
 }
 
 
@@ -97,8 +101,12 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
             follower_conf_committed: Default::default(),
             follower_term_committed_index: Default::default(),
             node_set: NodeSet {
-                nid_log: vec![],
-                nid_vote: vec![],
+                nid_log_all: vec![],
+                nid_vote_all: vec![],
+                committed_log: Default::default(),
+                new_log: Default::default(),
+                committed_vote: Default::default(),
+                new_vote: Default::default(),
             },
         }
     }
@@ -176,38 +184,14 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         }
         Ok(())
     }
-    fn conf_nid_log(&self) -> Vec<NID> {
-        let mut hash_set = HashSet::new();
-        let nid_set_vec = if self.conf.conf_node_committed().conf_version().eq(
-            self.conf.conf_node_new().conf_version()) {
-            vec![self.conf.conf_nid_log()]
-        } else {
-            vec![self.conf.conf_nid_log(), self.conf.conf_new_nid_log()]
-        };
-
-        for nid_set in nid_set_vec {
-            for nid in nid_set {
-                let _ = hash_set.insert(*nid);
-            }
-        }
-        hash_set.into_iter().collect()
+    fn conf_nid_log(&self) -> (HashSet<NID>, HashSet<NID>) {
+        (self.conf.conf_committed_nid_log().iter().cloned().collect(),
+         self.conf.conf_new_nid_log().iter().cloned().collect())
     }
 
-    fn conf_nid_vote(&self) -> Vec<NID> {
-        let mut hash_set = HashSet::new();
-        let nid_set_vec = if self.conf.conf_node_committed().conf_version().eq(
-            self.conf.conf_node_new().conf_version()) {
-            vec![self.conf.conf_committed_nid_vote()]
-        } else {
-            vec![self.conf.conf_committed_nid_vote(), self.conf.conf_committed_nid_vote()]
-        };
-
-        for nid_set in nid_set_vec {
-            for nid in nid_set {
-                let _ = hash_set.insert(*nid);
-            }
-        }
-        hash_set.into_iter().collect()
+    fn conf_nid_vote(&self) -> (HashSet<NID>, HashSet<NID>) {
+        (self.conf.conf_committed_nid_log().iter().cloned().collect(),
+         self.conf.conf_new_nid_log().iter().cloned().collect())
     }
 
     fn only_one_node_can_vote(&self) -> bool {
@@ -268,11 +252,11 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
             }
             RaftMessage::PreVoteReq(_m) => {
                 //event_add!(RAFT_FUZZY, Message::new(RaftEvent::PreVoteReq, source, dest)); //FUZZY
-                self.handle_pre_vote_request(_m, state)?;
+                self.handle_pre_vote_request(source, _m, state)?;
             }
             RaftMessage::PreVoteResp(_m) => {
                 //event_add!(RAFT_FUZZY, Message::new(RaftEvent::PreVoteResp, source, dest)); //FUZZY
-                self.handle_pre_vote_response(_m, state)?;
+                self.handle_pre_vote_response(source, _m, state)?;
             }
             RaftMessage::ApplyReq(_m) => {
                 //event_add!(RAFT_FUZZY, Message::new(RaftEvent::ApplyReq, source, dest)); //FUZZY
@@ -394,7 +378,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         let last_term = self.last_log_term();
         let term = self.current_term;
         let from = self.node_id();
-        let id_set = &self.node_set.nid_vote;
+        let id_set = &self.node_set.nid_vote_all;
         for id in id_set {
             if from != *id {
                 let m = Self::pre_vote_req_message(
@@ -408,9 +392,14 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
 
     fn handle_pre_vote_request(
         &mut self,
+        source:NID,
         m: PreVoteReq,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(source) ||
+            !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         let grant = self.can_grant_vote(
             m.request_term + 1,
             m.last_log_index,
@@ -435,9 +424,14 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
 
     fn handle_pre_vote_response(
         &mut self,
+        source:NID,
         m: PreVoteResp,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(source) ||
+            !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         if self.current_term == m.request_term && self.role == RaftRole::Follower {
             if m.vote_granted {
                 let _ = self.follower_pre_vote_granted.insert(m.source_nid, m.request_term);
@@ -489,7 +483,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         state.volatile.role = Some(RaftRole::Leader);
 
         let last_index = self.last_log_index();
-        let nid_set = &self.node_set.nid_log;
+        let nid_set = &self.node_set.nid_log_all;
         for i in nid_set {
             if *i != self.node_id() {
                 self.follower_next_index.insert(*i, last_index + 1);
@@ -568,9 +562,11 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         let last_log_term = self.last_log_term();
         let current_term = self.current_term;
         let from = self.node_id();
-
+        if !self.node_set.can_vote(from) {
+            return Ok(())
+        }
         // send VoteRequest message to both current configurate node and new configurate node
-        let id_set = &self.node_set.nid_vote;
+        let id_set = &self.node_set.nid_vote_all;
         for id in id_set {
             if from != *id {
                 let m = Self::vote_request_message(
@@ -589,6 +585,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MVoteReq,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(source) ||
+            !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         self.update_term(m.term, state)?;
         self.handle_vote_req_gut(source, m, state)?;
         Ok(())
@@ -600,6 +600,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MVoteReq,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(source) ||
+            !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         self.vote_req_resp(source, m, state)?;
         Ok(())
     }
@@ -646,6 +650,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MVoteResp,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(source) ||
+            !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         self.update_term(m.term, state)?;
         self.handle_vote_resp_gut(source, m, state)?;
         Ok(())
@@ -734,7 +742,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
 
 
     async fn append_entries(&self, state: &mut RaftState<T>, storage: &Storage<T>) -> Res<()> {
-        let nid_set = &self.node_set.nid_log;
+        let nid_set = &self.node_set.nid_log_all;
         for node_id in nid_set {
             if *node_id != self.node_id() {
                 self.append_entries_to_node(self.node_id(), node_id.clone(), state, storage).await?;
@@ -986,6 +994,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MAppendReq<T>,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_log(source) ||
+            !self.node_set.can_log(self.node_id()) {
+            return Ok(())
+        }
         self.update_term(m.term, state)?;
         self.handle_append_req_gut(source, m, state).await?;
         Ok(())
@@ -1082,6 +1094,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MAppendResp,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_log(source) ||
+            !self.node_set.can_log(self.node_id()) {
+            return Ok(())
+        }
         self.update_term(m.term, state)?;
         self.handle_append_resp_gut(source, m, state)?;
         Ok(())
@@ -1167,6 +1183,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         m: MApplyReq<T>,
         state: &mut RaftState<T>,
     ) -> Res<()> {
+        if !self.node_set.can_log(source) ||
+            !self.node_set.can_log(self.node_id()) {
+            return Ok(())
+        }
         self.update_term(m.term, state)?;
         self.apply_snapshot_gut(source, m, state)?;
         Ok(())
@@ -1238,6 +1258,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         source: NID,
         m: MApplyResp,
     ) -> Res<()> {
+        if !self.node_set.can_log(source) ||
+            !self.node_set.can_log(self.node_id()) {
+            return Ok(())
+        }
         if self.current_term != m.term {
             if let Some(index) = self.follower_next_index.get(&source) {
                 if *index < m.match_index + 1 {
@@ -1323,8 +1347,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         self.voted_for = voted_for;
         self.conf.update_conf_committed(conf_committed);
         self.conf.update_conf_new(conf_new);
-        self.node_set.nid_log = self.conf_nid_log();
-        self.node_set.nid_vote = self.conf_nid_vote();
+        (self.node_set.committed_log, self.node_set.new_log) = self.conf_nid_log();
+        (self.node_set.committed_vote, self.node_set.new_vote) = self.conf_nid_vote();
+        self.node_set.nid_log_all = self.node_set.committed_log.union(&self.node_set.new_log).cloned().collect();
+        self.node_set.nid_vote_all = self.node_set.committed_vote.union(&self.node_set.new_vote).cloned().collect();
         self.commit_index = self.snapshot_max_index_term.index;
         Ok(())
     }
@@ -1441,6 +1467,9 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         state: &mut RaftState<T>,
         storage: &Storage<T>,
     ) -> Res<()> {
+        if !self.node_set.can_vote(self.node_id()) {
+            return Ok(())
+        }
         let need_resp = m.wait_commit || m.wait_write_local;
         let id = m.id.clone();
         let from_client_request = m.from_client_request;
@@ -1581,7 +1610,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
             return Ok(());
         }
 
-        let nid_set = &self.node_set.nid_log;
+        let nid_set = &self.node_set.nid_log_all;
         let this_nid = self.node_id();
         for nid in nid_set {
             if *nid != this_nid {
@@ -1600,6 +1629,12 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
     /// TLA+ {D240422N-HandleUpdateConfReq}
     fn handle_update_conf_req(
         &mut self, source: NID, msg: MUpdateConfReq, state: &mut RaftState<T>) -> Res<()> {
+        if !self.node_set.can_log(self.node_id()) ||
+            !self.node_set.can_log(source)
+        {
+            return Ok(())
+        }
+
         if self.current_term != msg.term {
             return Ok(());
         }
@@ -1733,6 +1768,11 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
 
     /// TLA+ {D240422N-HandleUpdateConfResp}
     fn handle_update_conf_resp(&mut self, source: NID, msg: MUpdateConfResp) -> Res<()> {
+        if !self.node_set.can_log(self.node_id()) ||
+            !self.node_set.can_log(source)
+        {
+            return Ok(())
+        }
         if self.role != RaftRole::Leader {
             return Ok(());
         }
@@ -1758,5 +1798,15 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         let log = storage.read_log_entries(Unbounded, Unbounded).await?;
         assert_eq!(log, self.log);
         Ok(())
+    }
+}
+
+impl NodeSet {
+    fn can_vote(&self, nid: NID) -> bool {
+        self.committed_vote.contains(&nid) && self.committed_log.contains(&nid)
+    }
+
+    fn can_log(&self, nid:NID) -> bool {
+        self.committed_log.contains(&nid) && self.committed_log.contains(&nid)
     }
 }

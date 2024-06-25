@@ -133,7 +133,7 @@ impl RaftConf {
         self.conf_new.node.nid_vote.vec()
     }
 
-    pub fn conf_nid_log(&self) -> &Vec<NID> {
+    pub fn conf_committed_nid_log(&self) -> &Vec<NID> {
         self.conf_committed.node.nid_log.vec()
     }
 
