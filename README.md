@@ -5,7 +5,7 @@ TLA+ verified Raft consensus
 ![build](https://github.com/scuptio/scupt-raft/actions/workflows/build.yaml/badge.svg)
 
 
-# Specification Development of Raft
+# Specification-Driven Development of Raft
 
 ## Prerequisite
 
