@@ -1,5 +1,5 @@
 pub mod tests {
-    use std::collections::{Bound, HashMap, HashSet};
+    use std::collections::{Bound, HashMap};
     use std::marker::PhantomData;
     use std::sync::Arc;
 
@@ -7,7 +7,6 @@ pub mod tests {
     use rusqlite::{Connection, params, Transaction};
     use scupt_util::error_type::ET;
     use scupt_util::message::MsgTrait;
-    use scupt_util::mt_set::MTSet;
     use scupt_util::node_id::NID;
     use scupt_util::res::Res;
     use scupt_util::res_of::{res_option, res_sqlite};
@@ -19,7 +18,6 @@ pub mod tests {
     use crate::conf_version::ConfVersion;
     use crate::non_volatile_write::{NonVolatileWrite, WriteEntriesOpt, WriteSnapshotOpt};
     use crate::raft_message::LogEntry;
-    use crate::snapshot::SnapshotRange;
     use crate::store_async::StoreAsync;
     use crate::term_index::TermIndex;
     use crate::test_check_invariants::tests::InvariantChecker;
@@ -37,6 +35,7 @@ pub mod tests {
 
 
     impl<T: MsgTrait + 'static> SMStoreSimple<T> {
+        #[allow(dead_code)]
         pub fn open(storage_path: String, cluster_name: String) -> Res<Self> {
             let inner = StoreInner::<T>::new(
                 storage_path.clone(),
@@ -60,71 +59,6 @@ pub mod tests {
                 inner: Arc::new(inner),
             };
             Ok(s)
-        }
-
-
-        async fn reset_all(&self) -> Res<()> {
-            if !self.enable_check_invariants {
-                return Ok(());
-            }
-            //let (snapshot, log) = self.read_snapshot_and_log().await?;
-            let index_term = self.get_snapshot_index_term()?;
-            let value = self.read_snapshot_value()?;
-            let snapshot: SnapshotRange<T> = SnapshotRange {
-                begin_index: 0,
-                end_index: index_term.index,
-                entries: MTSet::new(HashSet::from_iter(value.iter().cloned())),
-            };
-            let log = todo!();
-            let (term, voted_for) = self.inner.get_term_voted()?;
-
-            InvariantChecker::set_and_check_invariants(
-                self.inner.cluster_name.clone(),
-                self.inner.path.clone(),
-                Some(0),
-                None,
-                Some((term, voted_for)),
-                Some((snapshot, log)),
-                false,
-            );
-            Ok(())
-        }
-
-        async fn read_snapshot_and_log(&self) -> Res<(SnapshotRange<T>, Vec<LogEntry<T>>)> {
-            /*
-            let (index_term, values, _) = self.read_snapshot(Uuid::new_v4().to_string(), None).await?;
-            let snapshot = Snapshot {
-                term: index_term.term,
-                index: index_term.index,
-                value: MTSet::new(values.into_iter().collect()),
-            };
-            let start = self.get_min_log_index().await?;
-            let end = self.get_max_log_index().await? + 1;
-            let log = self.read_log_entries(start, end).await?;
-            Ok((snapshot, log))
-
-             */
-            todo!()
-        }
-
-        async fn snapshot_log_changed_check(&self) -> Res<()> {
-            if !self.enable_check_invariants {
-                return Ok(());
-            }
-
-            let (snapshot, log) = self.read_snapshot_and_log().await?;
-
-            InvariantChecker::set_and_check_invariants(
-                self.inner.cluster_name.clone(),
-                self.inner.path.clone(),
-                None,
-                None,
-                None,
-                Some((snapshot, log)),
-                true,
-            );
-
-            Ok(())
         }
 
         async fn changed_term_voted_check(&self) -> Res<()> {
@@ -157,15 +91,6 @@ pub mod tests {
             Ok(())
         }
 
-        fn get_snapshot_index_term(&self) -> Res<TermIndex> {
-            let opt: Option<TermIndex> = self.inner.query_key("index_term".to_string())?;
-            let s = if let Some(s) = opt {
-                s
-            } else {
-                TermIndex::default()
-            };
-            Ok(s)
-        }
 
         fn read_snapshot_value(&self) -> Res<Vec<LogEntry<T>>> {
             let vec: Vec<LogEntry<T>> = self.inner.read_snapshot(Bound::Unbounded, Bound::Unbounded)?;
@@ -173,16 +98,7 @@ pub mod tests {
         }
 
 
-        async fn setup_store_state(
-            &self,
-            commit_index: Option<u64>,
-            term_voted: Option<(u64, Option<NID>)>,
-            log: Option<Vec<LogEntry<T>>>,
-            snapshot: Option<Vec<LogEntry<T>>>) -> Res<()> {
-            self.inner.setup_store_state(commit_index, term_voted, log, snapshot).await?;
-            self.reset_all().await?;
-            Ok(())
-        }
+
     }
 
     #[async_trait]
@@ -234,7 +150,6 @@ pub mod tests {
                     }
                     NonVolatileWrite::OpWriteLog { prev_index, entries, opt } => {
                         self.inner.write_log_entries(prev_index, entries, opt)?;
-                        self.snapshot_log_changed_check().await?;
                     }
                     NonVolatileWrite::OpCompactLog(entries) => {
                         self.inner.compact_log(entries).await?;
@@ -317,7 +232,7 @@ pub mod tests {
 
         ///
         fn read_conf_new(&self) -> Res<(ConfValue, ConfVersion)> {
-            let conf = res_option(self.query_key("conf_new".to_string())?)?;
+            let conf:(ConfValue, ConfVersion) = res_option(self.query_key("conf_new".to_string())?)?;
             Ok(conf)
         }
 
@@ -623,40 +538,6 @@ pub mod tests {
             self.read_entries(start, end, "log".to_string())
         }
 
-        async fn setup_store_state(
-            &self,
-            commit_index: Option<u64>,
-            term_voted: Option<(u64, Option<NID>)>,
-            log: Option<Vec<LogEntry<T>>>,
-            snapshot: Option<Vec<LogEntry<T>>>) -> Res<()> {
-            let mut c = Connection::open(self.path.clone()).unwrap();
-            let trans = c.transaction().unwrap();
-            if let Some(_commit_index) = commit_index {
-                self._set_commit_index(&trans, _commit_index)?;
-            }
-            if let Some((_term, _voted)) = term_voted {
-                self._set_term_voted(&trans, _term, _voted)?;
-            }
-            if let Some(_log) = log {
-                let prev_index = if let Some(_e) = _log.first() {
-                    _e.index - 1
-                } else {
-                    // when the log is empty, truncate all log entries which :
-                    //      index <= 0 && index > 0
-                    0
-                };
-                self.write_log_gut(&trans, prev_index, _log, WriteEntriesOpt {
-                    truncate_left: true,
-                    truncate_right: true,
-                })?;
-            }
-            if let Some(_values) = snapshot {
-                self.write_snapshot_gut(&trans, _values,
-                                        None, None)?;
-            }
-            trans.commit().unwrap();
-            Ok(())
-        }
         fn open(&self) -> Res<()> {
             let mut c = Connection::open(self.path.clone()).unwrap();
             let t = c.transaction().unwrap();

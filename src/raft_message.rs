@@ -3,6 +3,7 @@ use scupt_util::message::MsgTrait;
 
 use scupt_util::node_id::NID;
 use serde::{Deserialize, Serialize};
+use crate::conf_node::ConfNode;
 
 use crate::conf_version::ConfVersion;
 use crate::msg_dtm_testing::MDTMTesting;
@@ -278,10 +279,37 @@ pub struct MUpdateConfReq {
     pub conf_new: ConfNodeValue,
 }
 
-
+impl MUpdateConfReq {
+    pub(crate) fn to_dtm_msg(&self) -> MDTMUpdateConfReq {
+        MDTMUpdateConfReq {
+            term: self.term,
+            conf_committed: self.conf_committed.node.clone(),
+            conf_new: self.conf_new.node.clone(),
+        }
+    }
+}
 impl MsgTrait for MUpdateConfReq {}
 
 
+#[derive(
+    Clone,
+    Hash,
+    PartialEq,
+    Eq,
+    Debug,
+    Serialize,
+    Deserialize,
+    Decode,
+    Encode,
+)]
+pub struct MDTMUpdateConfReq {
+    pub term: u64,
+    pub conf_committed: ConfNode,
+    pub conf_new: ConfNode,
+}
+impl MsgTrait for MDTMUpdateConfReq {
+
+}
 #[derive(
     Clone,
     Hash,
@@ -334,8 +362,7 @@ pub enum RaftMessage<T: MsgTrait + 'static> {
     UpdateConfReq(MUpdateConfReq),
     UpdateConfResp(MUpdateConfResp),
     #[serde(bound = "T: MsgTrait")]
-    DTMTesting(MDTMTesting<T>),
-
+    DTMTesting(MDTMTesting<T>), // only used when DTM testing
 }
 
 impl<T: MsgTrait + 'static> MsgTrait for RaftMessage<T> {}

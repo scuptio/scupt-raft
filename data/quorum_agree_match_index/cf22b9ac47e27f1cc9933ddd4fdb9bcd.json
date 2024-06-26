@@ -4,8 +4,8 @@
     "leader_last_index": 0,
     "follower_match_index": {
       "3": 9,
-      "2": 10,
-      "4": 4
+      "4": 4,
+      "2": 10
     },
     "conf_committed": {
       "conf_version": {
@@ -48,5 +48,5 @@
       }
     }
   },
-  9
+  0
 ]

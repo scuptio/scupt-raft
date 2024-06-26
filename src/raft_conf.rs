@@ -3,9 +3,10 @@ use scupt_util::message::MsgTrait;
 use scupt_util::mt_set::MTSet;
 use scupt_util::node_id::NID;
 use serde::{Deserialize, Serialize};
+
 use crate::conf_node::ConfNode;
-use crate::conf_version::ConfVersion;
 use crate::conf_value::ConfValue;
+use crate::conf_version::ConfVersion;
 
 #[derive(
     Clone,
@@ -110,7 +111,11 @@ impl RaftConf {
         !self.conf_committed.term_version().eq(self.conf_new.term_version())
     }
 
-    pub fn current_conf_value(&self) -> &ConfValue {
+    pub fn conf_committed_value(&self) -> &ConfValue {
+        &self.conf_committed.value
+    }
+
+    pub fn conf_new_value(&self) -> &ConfValue {
         &self.conf_committed.value
     }
 

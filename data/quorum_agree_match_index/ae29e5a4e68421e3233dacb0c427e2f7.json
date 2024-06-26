@@ -3,11 +3,11 @@
     "leader_nid": 1,
     "leader_last_index": 1,
     "follower_match_index": {
-      "5": 3,
       "1": 0,
+      "5": 3,
       "3": 1,
-      "2": 7,
-      "4": 4
+      "4": 4,
+      "2": 7
     },
     "conf_committed": {
       "conf_version": {
@@ -52,5 +52,5 @@
       }
     }
   },
-  3
+  1
 ]

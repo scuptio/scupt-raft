@@ -18,15 +18,15 @@ pub mod tests {
             Ok(r) => { return r }
         }
     }
-    pub fn test_data<Input: DeserializeOwned, Result: DeserializeOwned>(path: String) -> Vec<(Input, Result)> {
+    pub fn test_data<Input: DeserializeOwned, Result: DeserializeOwned>(path: String) -> Vec<(Input, Result, String)> {
         let path = test_data_path(path).unwrap();
         let mut vec = vec![];
         let paths = fs::read_dir(path).unwrap();
         for entry in paths {
             let path = entry.unwrap().path();
-            let json = read_to_string(path).unwrap();
+            let json = read_to_string(path.clone()).unwrap();
             let (input, result) = from_json(json);
-            vec.push((input, result));
+            vec.push((input, result, path.to_str().unwrap().to_string()));
         }
         vec
     }

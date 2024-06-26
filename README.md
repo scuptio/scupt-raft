@@ -5,7 +5,7 @@ TLA+ verified Raft consensus
 ![build](https://github.com/scuptio/scupt-raft/actions/workflows/build.yaml/badge.svg)
 
 
-# Specification Development of Raft
+# Specification-Driven Development of Raft
 
 ## Prerequisite
 
@@ -48,6 +48,18 @@ TLA+ verified Raft consensus
    
    Example [test_raft.rs](src/test_raft_1n.rs)
 
-# Test Coverage
+## Test Coverage
 
 [Test Coverage in Docker](doc/coverage.md)
+
+# Build docker environment
+
+[Dockerfile](docker/Dockerfile)
+
+```shell
+   cd docker
+   docker build .
+```
+
+
+

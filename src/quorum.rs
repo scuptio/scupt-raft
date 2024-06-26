@@ -41,7 +41,6 @@ pub fn quorum_agree_match_index(
     conf_committed: &ConfNode,
     conf_new: &ConfNode,
 ) -> u64 {
-    let node = conf_committed.nid_log.vec();
     let filter = |id| {
         let opt = follower_match_index.get(&id);
         match opt {
@@ -51,14 +50,18 @@ pub fn quorum_agree_match_index(
             None => { 0 }
         }
     };
-    let mut agreed_index = _index(node, leader_nid, filter);
-    agreed_index.push(leader_last_index);
-    let quorum_agreed = _majority_agree_index(agreed_index, node.len());
+    let quorum_agreed = {
+        let node = conf_committed.nid_vote.vec();
+        let mut agreed_index = _index(node, leader_nid, filter);
+        agreed_index.push(leader_last_index);
+        let quorum_agreed = _majority_agree_index(agreed_index, node.len());
+        quorum_agreed
+    };
     if conf_committed.conf_version().eq(conf_new.conf_version()) {
         quorum_agreed
     } else {
-        let node_new = conf_new.nid_log.vec();
-        let mut agreed_index_new = _index(node, leader_nid, filter);
+        let node_new = conf_new.nid_vote.vec();
+        let mut agreed_index_new = _index(node_new, leader_nid, filter);
         agreed_index_new.push(leader_last_index);
         let quorum_agreed_new = _majority_agree_index(agreed_index_new, node_new.len());
         min(quorum_agreed, quorum_agreed_new)
@@ -134,7 +137,7 @@ fn _majority_agree_index(
     nodes_num: usize,
 ) -> u64 {
     let mut agreed_index = vec;
-    agreed_index.sort();
+    agreed_index.sort_by(|x, y| { x.cmp(y).reverse() } );
     let len = agreed_index.len();
     return if len == nodes_num && len >= 1 {
         let n = len / 2 + 1;

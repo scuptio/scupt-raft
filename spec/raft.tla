@@ -1143,7 +1143,7 @@ HandleApplySnapshotResp(_node_id, message, _node_id_set, _enable_action) ==
     /\ message.dest = _node_id
     /\ message.name = ApplyResp
     /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InVoteSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET _source == message.source
            payload == message.payload
        IN /\ payload.term = v_current_term[_node_id]
@@ -1176,7 +1176,7 @@ HandleAppendLogResp(_node_id, message, _node_id_set, _check_safety, _enable_acti
     /\ message.dest = _node_id
     /\ message.name = AppendResponse
     /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InVoteSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
     /\ LET from_node_id == message.source
            payload == message.payload
            actions0 == ActionSeqSetupAll(_node_id_set)
@@ -1396,6 +1396,7 @@ HandleUpdateConfResp(_nid, _msg, _nid_set, _enable_action) ==
     /\ _msg.dest = _nid
     /\ _msg.name = UpdateConfigResp
     /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
+    /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
     /\(LET conf_committed == _msg.payload.conf_committed
            conf_new == _msg.payload.conf_new
            term == _msg.payload.term

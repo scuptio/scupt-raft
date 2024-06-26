@@ -13,6 +13,7 @@ use sedeve_kit::{input, output};
 use tokio::sync::Mutex;
 use tokio::time::sleep;
 use tracing::debug;
+use crate::msg_dtm_testing::MDTMTesting;
 
 use crate::raft_message::{RAFT, RaftMessage};
 use crate::state::RaftState;
@@ -218,6 +219,14 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
         std::mem::swap(&mut state.message, &mut vec);
         for m in vec {
             debug!("send message: {:?}", m);
+            let m =m.map(|_m|{
+                match _m {
+                    RaftMessage::UpdateConfReq(_up) => {
+                        RaftMessage::DTMTesting(MDTMTesting::UpdateConfReq(_up.to_dtm_msg()))
+                    }
+                    _ => { _m }
+                }
+            });
             output!(RAFT, m.clone());
             sender.send(m, OptSend::new().enable_no_wait(true)).await?;
         }

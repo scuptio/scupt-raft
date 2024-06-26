@@ -5,7 +5,7 @@ use scupt_util::node_id::NID;
 use serde::{Deserialize, Serialize};
 
 use crate::msg_raft_state::MRaftState;
-use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MVoteReq, MVoteResp};
+use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MDTMUpdateConfReq, MVoteReq, MVoteResp};
 
 #[derive(
     Clone,
@@ -60,6 +60,8 @@ pub enum MDTMTesting<T: MsgTrait + 'static> {
     HandleApplyResp(MApplyResp),
     UpdateConfBegin(UpdateConf),
     UpdateConfCommit,
+    SendUpdateConf,
+    UpdateConfReq(MDTMUpdateConfReq),
 }
 
 impl<T: MsgTrait + 'static> MsgTrait for MDTMTesting<T> {}

@@ -201,7 +201,7 @@ pub mod tests {
     }
 
 
-    pub fn _test_quorum_agree_match_index(param: TestParamAgreeMatchIndex) -> u64 {
+    pub fn _test_quorum_agree_match_index(param: &TestParamAgreeMatchIndex) -> u64 {
         let index = quorum_agree_match_index(
             param.leader_nid,
             param.leader_last_index,
@@ -212,7 +212,7 @@ pub mod tests {
         index
     }
 
-    pub fn _test_quorum_agree_vote(param: TestParamAgreeVote) -> bool {
+    pub fn _test_quorum_agree_vote(param: &TestParamAgreeVote) -> bool {
         let ok = quorum_agree_vote(
             param.leader_nid,
             param.current_term,
@@ -223,7 +223,7 @@ pub mod tests {
         ok
     }
 
-    pub fn _test_quorum_check_conf_term_version(param: TestParamCheckConfTermVersion) -> bool {
+    pub fn _test_quorum_check_conf_term_version(param: &TestParamCheckConfTermVersion) -> bool {
         let ok = quorum_check_conf_term_version(
             param.leader_nid,
             &param.node,
@@ -234,7 +234,7 @@ pub mod tests {
     }
 
 
-    pub fn _test_quorum_check_term_commit_index(param: TestParamCheckTermCommitIndex) -> bool {
+    pub fn _test_quorum_check_term_commit_index(param: &TestParamCheckTermCommitIndex) -> bool {
         let ok = quorum_check_term_commit_index(
             param.leader_nid,
             &param.nid_set,
@@ -248,36 +248,36 @@ pub mod tests {
     #[test]
     fn test_quorum_agree_vote() {
         let test_data = test_data::<TestParamAgreeVote, bool>("quorum_agree_vote".to_string());
-        for (input, result) in test_data {
-            let ok = _test_quorum_agree_vote(input);
-            assert_eq!(ok, result);
+        for (input, result, _p) in test_data.iter() {
+            let ok = _test_quorum_agree_vote(&input);
+            assert_eq!(ok, *result);
         }
     }
 
     #[test]
     fn test_quorum_agree_match_index() {
         let test_data = test_data::<TestParamAgreeMatchIndex, u64>("quorum_agree_match_index".to_string());
-        for (input, result) in test_data {
+        for (input, result, _p) in test_data.iter() {
             let ok = _test_quorum_agree_match_index(input);
-            assert_eq!(ok, result);
+            assert_eq!(ok, *result);
         }
     }
 
     #[test]
     fn test_quorum_check_conf_term_version() {
         let test_data = test_data::<TestParamCheckConfTermVersion, bool>("quorum_check_conf_term_version".to_string());
-        for (input, result) in test_data {
+        for (input, result, _p) in test_data.iter() {
             let ok = _test_quorum_check_conf_term_version(input);
-            assert_eq!(ok, result);
+            assert_eq!(ok, *result);
         }
     }
 
     #[test]
     fn test_quorum_check_term_commit_index() {
         let test_data = test_data::<TestParamCheckTermCommitIndex, bool>("quorum_check_term_commit_index".to_string());
-        for (input, result) in test_data {
+        for (input, result, _p) in test_data.iter() {
             let ok = _test_quorum_check_term_commit_index(input);
-            assert_eq!(ok, result);
+            assert_eq!(ok, *result);
         }
     }
 }

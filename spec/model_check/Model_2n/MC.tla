@@ -78,7 +78,7 @@ const_1719323875171286000 ==
 
 \* CONSTANT definitions @modelParameterConstants:13VOTE
 const_1719323875171287000 == 
-1000
+2
 ----
 
 \* CONSTANT definitions @modelParameterConstants:14CLIENT_REQUEST

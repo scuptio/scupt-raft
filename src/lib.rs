@@ -50,6 +50,7 @@ mod arbitrary_value;
 
 mod node;
 mod term_index;
+mod test_raft_2n;
 
 
 
