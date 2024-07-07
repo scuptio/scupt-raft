@@ -7,8 +7,8 @@ use scupt_util::res::Res;
 
 use crate::conf_value::ConfValue;
 use crate::conf_version::ConfVersion;
+use crate::log_entry::LogEntry;
 use crate::non_volatile_write::NonVolatileWrite;
-use crate::raft_message::LogEntry;
 use crate::term_index::TermIndex;
 
 #[async_trait]

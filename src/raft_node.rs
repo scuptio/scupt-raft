@@ -27,6 +27,13 @@ use crate::raft_message::RaftMessage;
 use crate::state_machine::StateMachine;
 use crate::storage::Storage;
 
+pub struct RaftSetting {
+    pub node_id: NID,
+    pub node_peer_addr: Vec<NodeAddr>,
+    pub enable_testing: bool,
+    pub _auto_name: String,
+}
+
 pub struct RaftNode<T: MsgTrait + 'static> {
     node_id: NID,
     _dtm_testing: bool,
@@ -42,20 +49,18 @@ pub struct RaftNode<T: MsgTrait + 'static> {
 
 impl<T: MsgTrait + 'static> RaftNode<T> {
     pub fn new(
-        node_id: NID,
-        node_peer_addr: Vec<NodeAddr>,
+        setting: RaftSetting,
         storage: Storage<T>,
-        notify: Notifier,
-        enable_testing: bool,
+        notify: Notifier
     ) -> Res<Self> {
         let opt = IOServiceOpt {
             num_message_receiver: 1,
-            testing: enable_testing,
+            testing: setting.enable_testing,
             sync_service: false,
             port_debug: None,
         };
         let service = IOService::<RaftMessage<T>>::new_async_service(
-            node_id,
+            setting.node_id,
             "RaftService".to_string(),
             opt,
             notify.clone())?;
@@ -63,12 +68,12 @@ impl<T: MsgTrait + 'static> RaftNode<T> {
 
         let mut receiver_vec = service.receiver();
         let receiver = receiver_vec.pop().unwrap();
-        let state_machine = StateMachine::new(enable_testing);
+        let state_machine = StateMachine::new(setting.enable_testing, setting._auto_name.clone());
 
         Ok(RaftNode {
-            node_id,
-            _dtm_testing: enable_testing,
-            node_peer_addrs: node_peer_addr,
+            node_id: setting.node_id,
+            _dtm_testing: setting.enable_testing,
+            node_peer_addrs: setting.node_peer_addr.clone(),
             storage,
             sender,
             receiver,

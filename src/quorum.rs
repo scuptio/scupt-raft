@@ -148,3 +148,17 @@ fn _majority_agree_index(
         0
     };
 }
+
+
+#[cfg(test)]
+mod test {
+    use crate::quorum::_majority_agree_index;
+
+    #[test]
+    fn test_majority_agree_index() {
+        let v1 = vec![1, 2, 3];
+        assert_eq!(0, _majority_agree_index(v1.clone(), 4));
+
+        assert_eq!(2, _majority_agree_index(v1.clone(), 3));
+    }
+}

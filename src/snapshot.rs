@@ -3,7 +3,7 @@ use scupt_util::message::MsgTrait;
 use scupt_util::mt_set::MTSet;
 use serde::{Deserialize, Serialize};
 
-use crate::raft_message::LogEntry;
+use crate::log_entry::LogEntry;
 use crate::term_index::TermIndex;
 
 /// SnapshotV use by DTM
@@ -109,5 +109,38 @@ impl<V: MsgTrait + 'static> SnapshotRange<V> {
             end_index: self.end_index,
             entries: MTSet::new(set2),
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use scupt_util::mt_set::MTSet;
+
+    use crate::log_entry::LogEntry;
+    use crate::snapshot::SnapshotRange;
+
+    #[test]
+    fn test_snapshot_range() {
+        let mut sr = SnapshotRange::<i32>::default();
+        sr.begin_index = 0;
+        sr.end_index = 2;
+        sr.entries = MTSet::from_vec(vec![
+            LogEntry {
+                term: 1,
+                index: 1,
+                value: 1,
+            },
+            LogEntry {
+                term: 1,
+                index: 2,
+                value: 2,
+            },
+        ]);
+        let it = sr.to_snapshot_index_term();
+        println!("index term :{:?}", it);
+        let vec = sr.to_value();
+        println!("entries, {:?}", vec);
+        let sr2 = sr.map(|x| { x.to_string() });
+        println!("SnapshotRange<String> {:?}", sr2);
     }
 }

@@ -18,12 +18,12 @@ use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MDTMUp
     Decode,
     Encode,
 )]
-pub struct UpdateConf {
+pub struct MUpdateConf {
     pub nid_vote: MTSet<NID>,
     pub nid_log: MTSet<NID>,
 }
 
-impl MsgTrait for UpdateConf {}
+impl MsgTrait for MUpdateConf {}
 
 #[derive(
     Clone,
@@ -58,7 +58,7 @@ pub enum MDTMTesting<T: MsgTrait + 'static> {
     #[serde(bound = "T: MsgTrait")]
     HandleApplyReq(MApplyReq<T>),
     HandleApplyResp(MApplyResp),
-    UpdateConfBegin(UpdateConf),
+    UpdateConfBegin(MUpdateConf),
     UpdateConfCommit,
     SendUpdateConf,
     UpdateConfReq(MDTMUpdateConfReq),

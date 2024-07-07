@@ -8,7 +8,7 @@ pub mod tests {
     use scupt_util::message::MsgTrait;
     use scupt_util::node_id::NID;
 
-    use crate::raft_message::LogEntry;
+    use crate::log_entry::LogEntry;
     use crate::raft_role::RaftRole;
     use crate::snapshot::SnapshotRange;
 

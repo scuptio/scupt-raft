@@ -15,7 +15,7 @@ pub mod tests {
     use crate::conf_value::ConfValue;
     use crate::node_addr::NodeAddr;
     use crate::node_info::NodeInfo;
-    use crate::raft_node::RaftNode;
+    use crate::raft_node::{RaftNode, RaftSetting};
     use crate::storage::Storage;
     use crate::test_store_simple::tests::SMStoreSimple;
 
@@ -37,6 +37,7 @@ pub mod tests {
             max_compact_entries: u64,
             enable_check_invariants: bool,
             send_to_leader: bool,
+            test_auto_name: String,
         ) -> Res<TestRaftNode> {
             let mut conf = ConfValue::new(
                 cluster_name,
@@ -56,7 +57,9 @@ pub mod tests {
             let r_join_handle = thread::Builder::new()
                 .name(format!("node_raft_{}", this_peer.0.node_id))
                 .spawn(move || {
-                    let r = Self::thread_run::<M>(conf, node_peer_addr, notifier, enable_check_invariants);
+                    let r = Self::thread_run::<M>(
+                        conf, node_peer_addr, notifier,
+                        enable_check_invariants, test_auto_name.clone());
                     match r {
                         Ok(()) => {}
                         Err(e) => {
@@ -84,12 +87,19 @@ pub mod tests {
             node_peer_addr: Vec<NodeAddr>,
             notifier: Notifier,
             _enable_check_invariants: bool,
+            _auto_name: String,
         ) -> Res<()> {
             let s = Arc::new(SMStoreSimple::<M>::create(
                 conf.clone()
             )?);
             let storage = Storage::Async(s);
-            let node = RaftNode::<M>::new(conf.node_id, node_peer_addr, storage, notifier, true)?;
+            let setting = RaftSetting {
+                node_id: conf.node_id,
+                node_peer_addr,
+                enable_testing: true,
+                _auto_name,
+            };
+            let node = RaftNode::<M>::new(setting, storage, notifier)?;
             let ls = LocalSet::new();
             let r = Builder::new_current_thread()
                 .enable_all()

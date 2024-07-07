@@ -10,6 +10,7 @@ use tracing::{debug, error, trace};
 use crate::conf_node::ConfNode;
 use crate::conf_value::ConfValue;
 use crate::conf_version::ConfVersion;
+use crate::log_entry::LogEntry;
 use crate::msg_dtm_testing::MDTMTesting;
 use crate::msg_raft_state::MRaftState;
 use crate::node_info::NodeInfo;
@@ -21,7 +22,7 @@ use crate::quorum::{
     quorum_check_term_commit_index,
 };
 use crate::raft_conf::{ConfNodeValue, RaftConf};
-use crate::raft_message::{LogEntry, MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MDTMUpdateConfReq, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage, RCR_ERR_RESP, RCR_OK};
+use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MDTMUpdateConfReq, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage, RCR_ERR_RESP, RCR_OK};
 use crate::raft_role::RaftRole;
 use crate::snapshot::{Snapshot, SnapshotRange};
 use crate::state::RaftState;
