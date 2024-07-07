@@ -8,7 +8,7 @@ mod tests {
     use crate::node_info::NodeInfo;
     use crate::conf_value::ConfValue;
 
-    use crate::raft_message::{LogEntry, MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage};
+    use crate::raft_message::{LogEntry, MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage};
     use crate::raft_role::RaftRole;
     use crate::snapshot::Snapshot;
 
@@ -176,6 +176,16 @@ mod tests {
                 term: 1,
                 error: 0,
                 info: "".to_string(),
+            }),
+            RaftMessage::UpdateConfReq(MUpdateConfReq {
+                term: 0,
+                conf_committed: Default::default(),
+                conf_new: Default::default(),
+            }),
+            RaftMessage::UpdateConfResp(MUpdateConfResp {
+                term: 0,
+                conf_committed: Default::default(),
+                conf_new: Default::default(),
             }),
             RaftMessage::DTMTesting(MDTMTesting::LogCompaction(10)),
             RaftMessage::DTMTesting(MDTMTesting::Restart),

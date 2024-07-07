@@ -203,13 +203,9 @@ pub mod tests {
         fn check_invariants(
             node_states: HashMap<String, _StateForCheck>,
             committed_index_term: HashMap<u64, u64>) {
-            if true {
-                POOL.spawn(move || {
-                    Self::_check_invariants(node_states, committed_index_term);
-                });
-            } else {
+            POOL.spawn(move || {
                 Self::_check_invariants(node_states, committed_index_term);
-            }
+            });
         }
         fn _check_invariants(
             node_states: HashMap<String, _StateForCheck>,

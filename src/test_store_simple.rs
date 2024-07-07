@@ -96,9 +96,6 @@ pub mod tests {
             let vec: Vec<LogEntry<T>> = self.inner.read_snapshot(Bound::Unbounded, Bound::Unbounded)?;
             Ok(vec)
         }
-
-
-
     }
 
     #[async_trait]

@@ -4,7 +4,7 @@ mod tests {
     use sedeve_kit::action::action_message::ActionMessage;
     use sedeve_kit::action::tla_actions::TLAActionSeq;
     use sedeve_kit::trace::action_from_state_db::read_actions;
-    use sedeve_kit::trace::read_json::read_from_dict_json;
+    use sedeve_kit::trace::read_json::tla_constant_mapping;
     use serde_json::Value;
     use tracing::trace;
 
@@ -14,7 +14,7 @@ mod tests {
     #[test]
     fn test_read() {
         let path = test_data_path("raft_map_const.json".to_string()).unwrap();
-        let map = read_from_dict_json(Some(path.clone())).unwrap();
+        let map = tla_constant_mapping(Some(path.clone())).unwrap();
         let f = |v: Value| -> Res<()> {
             let tla_action_seq = TLAActionSeq::from(v.clone())?;
             for vec in [tla_action_seq.actions(), tla_action_seq.states()] {
