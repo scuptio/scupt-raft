@@ -25,12 +25,12 @@ pub fn quorum_agree_vote(
         }
     };
     let agreed_num = _count(voter, leader_nid, filter) + 1;
-    if conf_committed.conf_version().eq(conf_new.conf_version()) {
-        return agreed_num * 2 > voter.len();
+    return if conf_committed.conf_version().eq(conf_new.conf_version()) {
+        agreed_num * 2 > voter.len()
     } else {
         let voter_new = conf_new.nid_vote.vec();
         let agreed_num_new = _count(voter_new, leader_nid, filter) + 1;
-        return agreed_num * 2 > voter.len() && agreed_num_new * 2 > voter_new.len();
+        agreed_num * 2 > voter.len() && agreed_num_new * 2 > voter_new.len()
     }
 }
 
