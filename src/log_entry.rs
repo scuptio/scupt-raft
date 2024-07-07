@@ -41,7 +41,6 @@ impl<T: MsgTrait + 'static> MsgTrait for LogEntry<T> {}
 mod test {
     use crate::log_entry::LogEntry;
 
-    #[coverage(off)]
     #[test]
     fn test_log_entry() {
         let e = LogEntry {

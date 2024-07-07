@@ -1,4 +1,4 @@
-#![feature(coverage_attribute)]
+
 pub mod raft_message;
 pub mod raft_node;
 pub mod snapshot;

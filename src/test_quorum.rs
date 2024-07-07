@@ -54,7 +54,7 @@ pub mod tests {
         follower_term_and_committed_index: HashMap<NID, TermIndex>,
     }
 
-    #[coverage(off)]
+
     fn arbitrary_node_ids(u: &mut Unstructured) -> arbitrary::Result<(NID, Vec<NID>)> {
         let num_nodes = u32::arbitrary(u)? as u64 % MAX_NODE + 1;
         let leader_nid = 1;
@@ -65,7 +65,7 @@ pub mod tests {
         return Ok((leader_nid, nodes));
     }
 
-    #[coverage(off)]
+
     fn arbitrary_conf_node(u: &mut Unstructured, nodes: &Vec<NID>) -> arbitrary::Result<ConfNode> {
         let n = u32::arbitrary(u)? as usize % (nodes.len()) + 1;
         let mut nid_vote = vec![];
@@ -81,7 +81,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamAgreeMatchIndex {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let leader_last_index = u32::arbitrary(u)? as u64 % MAX_NODE;
@@ -110,7 +110,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamAgreeVote {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let mut follower_vote_granted = HashMap::default();
@@ -140,7 +140,7 @@ pub mod tests {
 
 
     impl<'a> Arbitrary<'a> for TestParamCheckConfTermVersion {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<TestParamCheckConfTermVersion> {
             let (leader_nid, node) = arbitrary_node_ids(u)?;
             let mut follower_conf = HashMap::new();
@@ -165,7 +165,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamCheckTermCommitIndex {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let mut follower_term_and_committed_index = HashMap::new();
@@ -192,7 +192,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for ConfVersion {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<ConfVersion> {
             let max = MAX_NODE / 2 + 1;
             let term = (u16::arbitrary(u)? as u64) % max;
@@ -206,7 +206,7 @@ pub mod tests {
         }
     }
 
-    #[coverage(off)]
+
     pub fn _test_quorum_agree_match_index(param: &TestParamAgreeMatchIndex) -> u64 {
         let index = quorum_agree_match_index(
             param.leader_nid,
@@ -217,7 +217,7 @@ pub mod tests {
         );
         index
     }
-    #[coverage(off)]
+
     pub fn _test_quorum_agree_vote(param: &TestParamAgreeVote) -> bool {
         let ok = quorum_agree_vote(
             param.leader_nid,
@@ -228,7 +228,7 @@ pub mod tests {
         );
         ok
     }
-    #[coverage(off)]
+
     pub fn _test_quorum_check_conf_term_version(param: &TestParamCheckConfTermVersion) -> bool {
         let ok = quorum_check_conf_term_version(
             param.leader_nid,
@@ -239,7 +239,7 @@ pub mod tests {
         ok
     }
 
-    #[coverage(off)]
+
     pub fn _test_quorum_check_term_commit_index(param: &TestParamCheckTermCommitIndex) -> bool {
         let ok = quorum_check_term_commit_index(
             param.leader_nid,

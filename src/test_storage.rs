@@ -25,31 +25,31 @@ pub mod tests {
         nid: Vec<NID>,
     }
 
-    #[coverage(off)]
+
     fn arbitrary_index(u: &mut Unstructured) -> arbitrary::Result<u64> {
         let n = u64::arbitrary(u)?;
         Ok(n % (ARBITRARY_MAX_NODES * 2))
     }
 
-    #[coverage(off)]
+
     fn arbitrary_term(u: &mut Unstructured) -> arbitrary::Result<u64> {
         let n = u64::arbitrary(u)?;
         Ok(n % (ARBITRARY_MAX_NODES * 2))
     }
 
-    #[coverage(off)]
+
     fn arbitrary_version(u: &mut Unstructured) -> arbitrary::Result<u64> {
         let n = u64::arbitrary(u)?;
         Ok(n % (ARBITRARY_MAX_NODES * 2))
     }
 
-    #[coverage(off)]
+
     fn arbitrary_nid(u: &mut Unstructured) -> arbitrary::Result<NID> {
         let nid = NID::arbitrary(u)? % ARBITRARY_MAX_NODES + 1;
         Ok(nid)
     }
 
-    #[coverage(off)]
+
     fn arbitrary_conf_version(u: &mut Unstructured) -> arbitrary::Result<ConfVersion> {
         let cv = ConfVersion {
             term: arbitrary_term(u)?,
@@ -59,7 +59,7 @@ pub mod tests {
         Ok(cv)
     }
 
-    #[coverage(off)]
+
     fn arbitrary_log_entries<T: for<'a> Arbitrary<'a> + MsgTrait + 'static>(
         prev_index: u64,
         term: u64,
@@ -78,7 +78,7 @@ pub mod tests {
         Ok(vec)
     }
 
-    #[coverage(off)]
+
     fn arbitrary_term_voted_for(u: &mut Unstructured) -> arbitrary::Result<(u64, Option<NID>)> {
         let _n = u64::arbitrary(u)?;
         let nid = arbitrary_nid(u)?;
@@ -93,7 +93,7 @@ pub mod tests {
 
 
     impl<'a, T: for<'b> Arbitrary<'b> + MsgTrait + 'static> Arbitrary<'a> for NonVolatileWrite<T> {
-        #[coverage(off)]
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let n = u8::arbitrary(u)?;
             let write_op = match n % 7 {
@@ -158,12 +158,12 @@ pub mod tests {
         vec: Vec<NonVolatileWrite<u64>>,
     }
 
-    #[coverage(off)]
+
     async fn _test_write_log(ops: Vec<NonVolatileWrite<u64>>, storage: Storage<u64>) -> Res<()> {
         storage.write(ops).await
     }
 
-    #[coverage(off)]
+
     pub fn _test_storage(ops: StorageOperation) {
         let conf = ConfValue {
             cluster_name: "test_storage".to_string(),
