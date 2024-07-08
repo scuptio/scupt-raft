@@ -1,31 +1,32 @@
 #[cfg(test)]
 pub mod tests {
+    use std::{fs, thread};
     use std::collections::HashMap;
+    use std::fs::create_dir_all;
     use std::net::{IpAddr, SocketAddr};
     use std::path::PathBuf;
     use std::str::FromStr;
     use std::sync::{Arc, Condvar, Mutex};
     use std::thread::sleep;
     use std::time::Duration;
-    use std::{fs, thread};
-    use std::fs::create_dir_all;
 
     use scupt_net::notifier::Notifier;
+    use scupt_util::logger::logger_setup;
     use scupt_util::node_id::NID;
     use scupt_util::res::Res;
     use scupt_util::res_of::res_io;
+    use sedeve_kit::{auto_clear, auto_init};
     use sedeve_kit::action::panic::set_panic_hook;
     use sedeve_kit::dtm::action_incoming::ActionIncoming;
     use sedeve_kit::dtm::action_incoming_factory::ActionIncomingFactory;
     use sedeve_kit::dtm::dtm_player::{DTMPlayer, TestOption};
     use sedeve_kit::trace::trace_reader::TraceReader;
-    use sedeve_kit::{auto_clear, auto_init};
     use tracing::info;
     use uuid::Uuid;
 
     use crate::node_addr::NodeAddr;
     use crate::node_info::NodeInfo;
-    use crate::raft_message::RAFT_ABSTRACT;
+    use crate::raft_message::RAFT;
     use crate::test_config::tests::TEST_LOCK;
     use crate::test_path::tests::test_data_path;
     use crate::test_raft_node::tests::TestRaftNode;
@@ -235,15 +236,9 @@ pub mod tests {
             let addr_str = simulate_server.to_string();
             auto_init!(test_auto_name, 0, simulator_node_id, addr_str.as_str());
             let incoming = p.clone();
-            let opt = if !test_auto_name.eq(&RAFT_ABSTRACT.to_string()) {
-                TestOption::new()
+            let opt = TestOption::new()
                     .set_wait_both_begin_and_end_action(false)
-                    .set_sequential_output_action(false)
-            } else {
-                TestOption::new()
-                    .set_wait_both_begin_and_end_action(true)
-                    .set_sequential_output_action(false)
-            };
+                .set_sequential_output_action(false);
             let test = self.clone();
             let f_done = move || {
                 test.stop();
@@ -283,6 +278,7 @@ pub mod tests {
                     1,
                     true,
                     false,
+                    test_auto_name.to_string(),
                 )?;
                 nodes.push(node)
             }
@@ -370,6 +366,24 @@ pub mod tests {
                 )
                 .unwrap();
             }
+        }
+    }
+
+
+    pub fn dtm_test_raft_n(n: usize, num: usize) {
+        logger_setup("debug");
+
+        for i in 1..=num {
+            let path = format!("raft_trace_{}n_{}.db", n, i);
+            let buf = PathBuf::from(test_data_path(path.clone()).unwrap());
+            if !buf.exists() {
+                break;
+            }
+
+            dtm_test_raft(InputType::FromDB(path),
+                          1000 * (n as u16), n as u32,
+                          format!("{}_{}n_{}", RAFT.to_string(), n, i),
+                          None)
         }
     }
 }

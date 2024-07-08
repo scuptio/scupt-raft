@@ -1,3 +1,4 @@
+
 pub mod tests {
     use std::collections::HashMap;
 
@@ -15,7 +16,6 @@ pub mod tests {
         quorum_check_term_commit_index,
     };
     use crate::term_index::TermIndex;
-    use crate::test_data::tests::test_data;
 
     const MAX_NODE: u64 = 11;
 
@@ -45,7 +45,6 @@ pub mod tests {
         follower_conf: HashMap<NID, ConfVersion>,
     }
 
-
     #[derive(Debug, Clone, Serialize, Deserialize)]
     pub struct TestParamCheckTermCommitIndex {
         leader_nid: NID,
@@ -54,6 +53,7 @@ pub mod tests {
         leader_conf_commit_index: u64,
         follower_term_and_committed_index: HashMap<NID, TermIndex>,
     }
+
 
     fn arbitrary_node_ids(u: &mut Unstructured) -> arbitrary::Result<(NID, Vec<NID>)> {
         let num_nodes = u32::arbitrary(u)? as u64 % MAX_NODE + 1;
@@ -64,6 +64,7 @@ pub mod tests {
         }
         return Ok((leader_nid, nodes));
     }
+
 
     fn arbitrary_conf_node(u: &mut Unstructured, nodes: &Vec<NID>) -> arbitrary::Result<ConfNode> {
         let n = u32::arbitrary(u)? as usize % (nodes.len()) + 1;
@@ -80,6 +81,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamAgreeMatchIndex {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let leader_last_index = u32::arbitrary(u)? as u64 % MAX_NODE;
@@ -108,6 +110,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamAgreeVote {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let mut follower_vote_granted = HashMap::default();
@@ -137,6 +140,7 @@ pub mod tests {
 
 
     impl<'a> Arbitrary<'a> for TestParamCheckConfTermVersion {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<TestParamCheckConfTermVersion> {
             let (leader_nid, node) = arbitrary_node_ids(u)?;
             let mut follower_conf = HashMap::new();
@@ -161,6 +165,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for TestParamCheckTermCommitIndex {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let (leader_nid, nid_set) = arbitrary_node_ids(u)?;
             let mut follower_term_and_committed_index = HashMap::new();
@@ -187,6 +192,7 @@ pub mod tests {
     }
 
     impl<'a> Arbitrary<'a> for ConfVersion {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<ConfVersion> {
             let max = MAX_NODE / 2 + 1;
             let term = (u16::arbitrary(u)? as u64) % max;
@@ -244,6 +250,12 @@ pub mod tests {
         );
         ok
     }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::test_data::tests::test_data;
+    use crate::test_quorum::tests::{_test_quorum_agree_match_index, _test_quorum_agree_vote, _test_quorum_check_conf_term_version, _test_quorum_check_term_commit_index, TestParamAgreeMatchIndex, TestParamAgreeVote, TestParamCheckConfTermVersion, TestParamCheckTermCommitIndex};
 
     #[test]
     fn test_quorum_agree_vote() {

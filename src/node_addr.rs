@@ -1,4 +1,5 @@
 use bincode::{Decode, Encode};
+use scupt_util::message::MsgTrait;
 use scupt_util::node_id::NID;
 use serde::{Deserialize, Serialize};
 
@@ -18,3 +19,5 @@ pub struct NodeAddr {
     pub addr: String,
     pub port: u16,
 }
+
+impl MsgTrait for NodeAddr {}

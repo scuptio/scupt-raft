@@ -13,27 +13,29 @@ use sedeve_kit::{input, output};
 use tokio::sync::Mutex;
 use tokio::time::sleep;
 use tracing::debug;
-use crate::msg_dtm_testing::MDTMTesting;
 
-use crate::raft_message::{RAFT, RaftMessage};
+use crate::msg_dtm_testing::MDTMTesting;
+use crate::raft_message::RaftMessage;
 use crate::state::RaftState;
 use crate::state_machine_inner::_StateMachineInner;
 use crate::storage::Storage;
 
 pub struct StateMachine<T: MsgTrait + 'static> {
     inner: StateMachineInner<T>,
-    dtm_testing: bool,
+    dtm_testing: bool
 }
 
 #[derive(Clone)]
 struct StateMachineInner<T: MsgTrait + 'static> {
     inner: Arc<Mutex<_StateMachineInner<T>>>,
+    _auto_name: String,
 }
 
 
 impl<T: MsgTrait + 'static> StateMachineInner<T> {
-    fn new() -> Self {
+    fn new(_auto_name: String) -> Self {
         Self {
+            _auto_name,
             inner: Arc::new(Mutex::new(_StateMachineInner::new())),
         }
     }
@@ -49,10 +51,11 @@ impl<T: MsgTrait + 'static> StateMachineInner<T> {
     }
 
     async fn _dtm_step_incoming(
+        _auto_name: &str,
         message: &Message<RaftMessage<T>>
     ) {
         let _m = message.clone();
-        input!(RAFT, _m)
+        input!(_auto_name, _m)
     }
 
     /// only when read snapshot value, the `Inner` struct would read from storage,
@@ -63,7 +66,7 @@ impl<T: MsgTrait + 'static> StateMachineInner<T> {
         storage: &Storage<T>,
     ) -> Res<()> {
         let mut inner = self.inner.lock().await;
-        Self::_dtm_step_incoming(&message).await;
+        Self::_dtm_step_incoming(self._auto_name.as_str(), &message).await;
         inner.step_incoming(message, state, storage).await?;
         Ok(())
     }
@@ -91,10 +94,11 @@ impl<T: MsgTrait + 'static> StateMachineInner<T> {
 
 
 impl<T: MsgTrait + 'static> StateMachine<T> {
-    pub fn new(dtm_testing: bool) -> Self {
+    pub fn new(dtm_testing: bool, auto_name: String) -> Self {
         Self {
-            inner: StateMachineInner::new(),
+            inner: StateMachineInner::new(auto_name),
             dtm_testing,
+
         }
     }
 
@@ -148,8 +152,9 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
         let receiver3 = receiver.clone();
         let sender3 = sender.clone();
         let storage3 = storage.clone();
+        let auto_name = self.inner._auto_name.clone();
         let _j3 = spawn_local_task(notifier.clone(), "incoming_message", async move {
-            Self::incoming(inner3, sender3, receiver3, storage3).await?;
+            Self::incoming(auto_name, inner3, sender3, receiver3, storage3).await?;
             Ok::<(), ET>(())
         })?;
         vec.push(_j3);
@@ -162,6 +167,7 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
     }
 
     async fn incoming(
+        auto_name: String,
         inner: StateMachineInner<T>,
         sender: Arc<dyn SenderAsync<RaftMessage<T>>>,
         receiver: Arc<dyn ReceiverAsync<RaftMessage<T>>>,
@@ -172,7 +178,7 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
             let m = receiver.receive().await?;
             inner.step_incoming(m, &mut state, &storage).await?;
             Self::write_state(&mut state, &storage).await?;
-            Self::send_message(&mut state, &*sender).await?;
+            Self::send_message(auto_name.as_str(), &mut state, &*sender).await?;
             inner.check_storage(&storage).await?;
         }
     }
@@ -184,11 +190,12 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
         storage: Storage<T>,
     ) -> Res<()> {
         let mut state = Default::default();
+        let auto_name = inner._auto_name.clone();
         loop {
             sleep(Duration::from_millis(ms)).await;
             inner.step_tick_short(&mut state, &storage).await?;
             Self::write_state(&mut state, &storage).await?;
-            Self::send_message(&mut state, &*sender).await?;
+            Self::send_message(auto_name.as_str(), &mut state, &*sender).await?;
         }
     }
 
@@ -199,11 +206,12 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
         storage: Storage<T>,
     ) -> Res<()> {
         let mut state = Default::default();
+        let auto_name = inner._auto_name.clone();
         loop {
             sleep(Duration::from_millis(ms)).await;
             inner.step_tick_long(&mut state).await?;
             Self::write_state(&mut state, &storage).await?;
-            Self::send_message(&mut state, &*sender).await?;
+            Self::send_message(auto_name.as_str(), &mut state, &*sender).await?;
         }
     }
 
@@ -214,7 +222,7 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
         Ok(())
     }
 
-    async fn send_message(state: &mut RaftState<T>, sender: &dyn SenderAsync<RaftMessage<T>>) -> Res<()> {
+    async fn send_message(_auto_name: &str, state: &mut RaftState<T>, sender: &dyn SenderAsync<RaftMessage<T>>) -> Res<()> {
         let mut vec = vec![];
         std::mem::swap(&mut state.message, &mut vec);
         for m in vec {
@@ -227,7 +235,7 @@ impl<T: MsgTrait + 'static> StateMachine<T> {
                     _ => { _m }
                 }
             });
-            output!(RAFT, m.clone());
+            output!(_auto_name, m.clone());
             sender.send(m, OptSend::new().enable_no_wait(true)).await?;
         }
         Ok(())

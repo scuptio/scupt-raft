@@ -1,3 +1,4 @@
+
 pub mod raft_message;
 pub mod raft_node;
 pub mod snapshot;
@@ -28,14 +29,12 @@ mod test_check_invariants;
 mod test_config;
 
 
-mod test_raft_1n;
-mod test_raft_3n;
 mod test_raft_from_json;
 mod state_machine_inner;
 mod store_sync;
 mod store_async;
 pub mod storage;
-mod opt_read_snapshot;
+
 mod node_info;
 pub mod conf_value;
 
@@ -50,7 +49,9 @@ mod arbitrary_value;
 
 mod node;
 mod term_index;
-mod test_raft_2n;
+mod test_raft_dtm;
+
+mod log_entry;
 
 
 

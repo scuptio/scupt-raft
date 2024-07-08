@@ -7,7 +7,6 @@ use serde::{Deserialize, Serialize};
 use crate::conf_version::ConfVersion;
 
 #[derive(
-
     Clone,
     Hash,
     PartialEq,

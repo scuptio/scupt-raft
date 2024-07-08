@@ -11,12 +11,11 @@ pub mod tests {
 
     use crate::conf_value::ConfValue;
     use crate::conf_version::ConfVersion;
+    use crate::log_entry::LogEntry;
     use crate::node_info::NodeInfo;
     use crate::non_volatile_write::{NonVolatileWrite, WriteEntriesOpt};
-    use crate::raft_message::LogEntry;
     use crate::snapshot::SnapshotRange;
     use crate::storage::Storage;
-
     use crate::test_store_simple::tests::SMStoreSimple;
 
     const ARBITRARY_MAX_NODES: u64 = 20;
@@ -26,10 +25,12 @@ pub mod tests {
         nid: Vec<NID>,
     }
 
+
     fn arbitrary_index(u: &mut Unstructured) -> arbitrary::Result<u64> {
         let n = u64::arbitrary(u)?;
         Ok(n % (ARBITRARY_MAX_NODES * 2))
     }
+
 
     fn arbitrary_term(u: &mut Unstructured) -> arbitrary::Result<u64> {
         let n = u64::arbitrary(u)?;
@@ -42,10 +43,12 @@ pub mod tests {
         Ok(n % (ARBITRARY_MAX_NODES * 2))
     }
 
+
     fn arbitrary_nid(u: &mut Unstructured) -> arbitrary::Result<NID> {
         let nid = NID::arbitrary(u)? % ARBITRARY_MAX_NODES + 1;
         Ok(nid)
     }
+
 
     fn arbitrary_conf_version(u: &mut Unstructured) -> arbitrary::Result<ConfVersion> {
         let cv = ConfVersion {
@@ -75,6 +78,7 @@ pub mod tests {
         Ok(vec)
     }
 
+
     fn arbitrary_term_voted_for(u: &mut Unstructured) -> arbitrary::Result<(u64, Option<NID>)> {
         let _n = u64::arbitrary(u)?;
         let nid = arbitrary_nid(u)?;
@@ -87,7 +91,9 @@ pub mod tests {
         Ok((term, opt_nid))
     }
 
+
     impl<'a, T: for<'b> Arbitrary<'b> + MsgTrait + 'static> Arbitrary<'a> for NonVolatileWrite<T> {
+
         fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
             let n = u8::arbitrary(u)?;
             let write_op = match n % 7 {
@@ -152,9 +158,11 @@ pub mod tests {
         vec: Vec<NonVolatileWrite<u64>>,
     }
 
+
     async fn _test_write_log(ops: Vec<NonVolatileWrite<u64>>, storage: Storage<u64>) -> Res<()> {
         storage.write(ops).await
     }
+
 
     pub fn _test_storage(ops: StorageOperation) {
         let conf = ConfValue {

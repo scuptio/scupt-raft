@@ -1,8 +1,25 @@
-FROM scupt-prerequisite:latest
+FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    ca-certificates curl file \
+    build-essential \
+    autoconf automake autotools-dev libtool xutils-dev \
+    nginx
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
 
 ENV PATH /root/.cargo/bin/:$PATH
 
-WORKDIR /scupt-raft
+RUN rustup default nightly
+RUN rustup component add llvm-tools-preview
+RUN rustup update
+RUN cargo install grcov
+
+ENV PATH /root/.cargo/bin/:$PATH
+
+RUN mkdir -p /root/scupt-raft
+WORKDIR /root/scupt-raft
 
 # invalid the cache
 COPY . .
@@ -10,14 +27,13 @@ COPY . .
 ENV RUSTFLAGS="-Cinstrument-coverage"
 ENV LLVM_PROFILE_FILE="scupt-raft-%p-%m.profraw"
 
-
-COPY data/config.toml /root/.cargo/
 COPY Cargo.toml ./
 COPY src ./src
 COPY tests ./tests
 COPY data ./data
 COPY script ./script
 
+RUN cargo update
 RUN cargo build --verbose
 RUN date
 RUN cargo test --verbose -- --nocapture

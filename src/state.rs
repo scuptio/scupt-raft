@@ -11,6 +11,8 @@ pub struct RaftState<T: MsgTrait + 'static> {
     pub volatile: StateVolatile,
     /// message to send
     pub message: Vec<Message<RaftMessage<T>>>,
+
+    pub _auto_name: String,
 }
 
 impl<T: MsgTrait + 'static> Default for RaftState<T> {
@@ -19,6 +21,7 @@ impl<T: MsgTrait + 'static> Default for RaftState<T> {
             non_volatile: Default::default(),
             volatile: Default::default(),
             message: vec![],
+            _auto_name: "".to_string(),
         }
     }
 }

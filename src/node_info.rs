@@ -24,6 +24,7 @@ impl MsgTrait for NodeInfo {}
 
 
 impl<'a> Arbitrary<'a> for NodeInfo {
+
     fn arbitrary(u: &mut Unstructured<'a>) -> arbitrary::Result<Self> {
         Ok(Self {
             node_id: NID::arbitrary(u)?,

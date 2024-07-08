@@ -16,8 +16,8 @@ pub mod tests {
 
     use crate::conf_value::ConfValue;
     use crate::conf_version::ConfVersion;
+    use crate::log_entry::LogEntry;
     use crate::non_volatile_write::{NonVolatileWrite, WriteEntriesOpt, WriteSnapshotOpt};
-    use crate::raft_message::LogEntry;
     use crate::store_async::StoreAsync;
     use crate::term_index::TermIndex;
     use crate::test_check_invariants::tests::InvariantChecker;
@@ -96,9 +96,6 @@ pub mod tests {
             let vec: Vec<LogEntry<T>> = self.inner.read_snapshot(Bound::Unbounded, Bound::Unbounded)?;
             Ok(vec)
         }
-
-
-
     }
 
     #[async_trait]

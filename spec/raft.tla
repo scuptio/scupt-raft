@@ -28,7 +28,7 @@ CONSTANT REPLICATE
 CONSTANT RESTART
 CONSTANT RECONFIG
 CONSTANT CLIENT_REQUEST
-
+CONSTANT ENABLE_IGNORE
 ----
 
 
@@ -661,6 +661,32 @@ _UnchangedLeaderVar(_nid) ==
     /\ UNCHANGED <<v_follower_vote_granted, v_follower_match_index, v_commit_index, v_follower_term_commit_index, v_follower_conf>>
     
 
+_IgnoreMessage(_nid, _m, _enable_action, _enable_ignore) ==
+    /\ _enable_ignore
+    /\ LET input_action == Action(ActionInput, _m)
+            actions0 == ActionSeqSetupAll({_nid})
+            actions1 == ActionCheckState(_nid)    
+       IN /\ SetAction(__action__, actions0,   actions1 \o input_action, _enable_action)
+          /\ UNCHANGED <<
+                v_role,
+                v_current_term,
+                v_log, 
+                v_voted_for,
+                v_snapshot,
+                v_commit_index,
+                v_follower_next_index,
+                v_follower_match_index,
+                v_follower_vote_granted,
+                v_messages,
+                v_history,
+                v_acked_value,  
+                v_conf_committed,
+                v_conf_new,
+                v_follower_conf,
+                v_follower_term_commit_index
+            >>
+
+
 \* NODE_ID _node_id times out and starts a new election.
 VoteRequestVote(_node_id, _max_term, _check_safety, _node_id_set, _enable_action) == 
     /\ _InVoteSet(_node_id, v_conf_committed[_node_id], v_conf_new[_node_id])
@@ -1057,52 +1083,52 @@ _HandleAppendLogResponse(_node_id, _source, _payload, _node_id_set, _check_safet
      /\ v_current_term' = [v_current_term EXCEPT ![_node_id] = term_context.current_term]
 
 
-HandleVoteReq(node_id, message, _node_id_set, _enable_action) ==
-    /\ message.dest = node_id
-    /\ message.name = VoteRequest
-    /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
-    /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
-    /\ LET actions1 == ActionCheckState(node_id)
-           actions2 == Action(ActionInput, message)
-       IN __HandleVoteRequest(message.dest, message.source, message.payload, actions1 \o actions2, _node_id_set, _enable_action)
-    /\ UNCHANGED <<v_history, vars_replicate>>
+HandleVoteReq(node_id, message, _node_id_set, _enable_action, _enable_ignore) ==
+    IF /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
+       /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
+    THEN
+        /\ LET actions1 == ActionCheckState(node_id)
+               actions2 == Action(ActionInput, message)
+           IN __HandleVoteRequest(message.dest, message.source, message.payload, actions1 \o actions2, _node_id_set, _enable_action)
+        /\ UNCHANGED <<v_history, vars_replicate>>
+    ELSE  
+        _IgnoreMessage(node_id, message, _enable_action, _enable_ignore)
 
-
-    
-HandleVoteResp(node_id, message, _check_safety, _node_id_set, _enable_action) ==
-    /\ message.dest = node_id
-    /\ message.name = VoteResponse
-    /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
-    /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
-    /\ LET
-          actions1 == ActionCheckState(node_id) 
-          actions2 == Action(ActionInput, message)
-       IN __HandleVoteResponse(message.dest, message.source, 
-            message.payload, actions1 \o actions2, 
-            _check_safety, _node_id_set, _enable_action)
-    /\ UNCHANGED <<v_messages, v_acked_value>>
+           
+   
+HandleVoteResp(node_id, message, _check_safety, _node_id_set, _enable_action, _enable_ignore) ==
+    IF /\ _InVoteSet(node_id, v_conf_new[node_id], v_conf_committed[node_id])
+       /\ _InVoteSet(message.source, v_conf_new[node_id], v_conf_committed[node_id])
+    THEN 
+        /\ LET actions1 == ActionCheckState(node_id) 
+               actions2 == Action(ActionInput, message)
+           IN __HandleVoteResponse(message.dest, message.source, 
+                message.payload, actions1 \o actions2, 
+                _check_safety, _node_id_set, _enable_action)
+        /\ UNCHANGED <<v_messages, v_acked_value>>
+    ELSE      
+        _IgnoreMessage(node_id, message, _enable_action, _enable_ignore)
         
-
-HandleAppendLogReq(_node_id, message, _check_safety, _node_id_set, _enable_action) ==
-    /\ message.dest = _node_id
-    /\ message.name = AppendRequest
-    /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ LET from_node_id == message.source
-           payload == message.payload
-           actions0 == ActionSeqSetupAll(_node_id_set)
-           actions1 == ActionCheckState(_node_id)
-           actions2 == Action(ActionInput, message)
-       IN /\ _HandleAppendLog(_node_id, from_node_id, payload, actions0, actions1 \o actions2, _check_safety, _enable_action) 
-    /\ UNCHANGED <<vars_vote, vars_config>>
-    
+HandleAppendLogReq(_node_id, message, _check_safety, _node_id_set, _enable_action, _enable_ignore) ==
+   IF /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+      /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+   THEN
+        /\ LET from_node_id == message.source
+               payload == message.payload
+               actions0 == ActionSeqSetupAll(_node_id_set)
+               actions1 == ActionCheckState(_node_id)
+               actions2 == Action(ActionInput, message)
+           IN /\ _HandleAppendLog(_node_id, from_node_id, payload, actions0, actions1 \o actions2, _check_safety, _enable_action) 
+        /\ UNCHANGED <<vars_vote, vars_config>>
+   ELSE 
+        _IgnoreMessage(_node_id, message, _enable_action, _enable_ignore)
+       
 \* TLA+ {D240524N- update commit index}
-HandleApplySnapshotReq(_node_id, message, _node_id_set, _enable_action) ==
-    /\ message.dest = _node_id
-    /\ message.name = ApplyReq
-    /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ LET from_node_id == message.source
+HandleApplySnapshotReq(_node_id, message, _node_id_set, _enable_action, _enable_ignore) ==
+    IF /\ _InLogSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+       /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+    THEN (
+       LET from_node_id == message.source
            payload == message.payload
            actions0 == ActionSeqSetupAll(_node_id_set)
            actions1 == ActionCheckState(_node_id)
@@ -1137,60 +1163,65 @@ HandleApplySnapshotReq(_node_id, message, _node_id_set, _enable_action) ==
                         v_history,
                         v_acked_value
                         >>
-     /\ UNCHANGED <<vars_vote, vars_config>>
-
-HandleApplySnapshotResp(_node_id, message, _node_id_set, _enable_action) ==
-    /\ message.dest = _node_id
-    /\ message.name = ApplyResp
-    /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ LET _source == message.source
-           payload == message.payload
-       IN /\ payload.term = v_current_term[_node_id]
-          /\ v_follower_next_index'  = [v_follower_next_index  EXCEPT ![_node_id][_source] = 
-                Max({payload.match_index + 1, v_follower_next_index[_node_id][_source]})]
-          /\ v_follower_match_index' = [v_follower_match_index EXCEPT ![_node_id][_source] = 
-                Max({payload.match_index, v_follower_match_index[_node_id][_source]})]
-    /\ LET  actions0 == ActionSeqSetupAll(_node_id_set)
-            actions1 == ActionCheckState(_node_id)
-            actions2 == Action(ActionInput, message)
-       IN SetAction(__action__, actions0, actions1 \o actions2, _enable_action)
-    /\ UNCHANGED <<
-            v_role,
-            v_current_term,
-            v_log, 
-            v_voted_for,
-            v_snapshot,
-            v_commit_index,
-            v_follower_vote_granted,
-            v_messages,
-            v_history,
-            v_acked_value,  
-            v_conf_committed,
-            v_conf_new,
-            v_follower_conf,
-            v_follower_term_commit_index
-       >>
-         
-HandleAppendLogResp(_node_id, message, _node_id_set, _check_safety, _enable_action) ==
-    /\ message.dest = _node_id
-    /\ message.name = AppendResponse
-    /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
-    /\ LET from_node_id == message.source
-           payload == message.payload
-           actions0 == ActionSeqSetupAll(_node_id_set)
-           actions1 == ActionCheckState(_node_id)
-           actions2 == Action(ActionInput, message)
-       IN /\ _HandleAppendLogResponse(_node_id, from_node_id, payload, _node_id_set, _check_safety) 
-          /\ SetAction(__action__, actions0, actions1 \o actions2, _enable_action)
-    /\ UNCHANGED <<vars_vote, 
-            v_conf_committed,
-            v_conf_new,
-            v_follower_conf
-        >>
-
-
+        /\ UNCHANGED <<vars_vote, vars_config>>
+    )
+    ELSE
+        _IgnoreMessage(_node_id, message, _enable_action, _enable_ignore)
+        
+        
+HandleApplySnapshotResp(_node_id, message, _node_id_set, _enable_action, _enable_ignore) ==
+    IF /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+       /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+       /\ message.payload.term = v_current_term[_node_id]
+    THEN 
+        /\ LET _source == message.source
+               payload == message.payload
+           IN 
+              /\ v_follower_next_index'  = [v_follower_next_index  EXCEPT ![_node_id][_source] = 
+                    Max({payload.match_index + 1, v_follower_next_index[_node_id][_source]})]
+              /\ v_follower_match_index' = [v_follower_match_index EXCEPT ![_node_id][_source] = 
+                    Max({payload.match_index, v_follower_match_index[_node_id][_source]})]
+        /\ LET  actions0 == ActionSeqSetupAll(_node_id_set)
+                actions1 == ActionCheckState(_node_id)
+                actions2 == Action(ActionInput, message)
+           IN SetAction(__action__, actions0, actions1 \o actions2, _enable_action)
+        /\ UNCHANGED <<
+                v_role,
+                v_current_term,
+                v_log, 
+                v_voted_for,
+                v_snapshot,
+                v_commit_index,
+                v_follower_vote_granted,
+                v_messages,
+                v_history,
+                v_acked_value,  
+                v_conf_committed,
+                v_conf_new,
+                v_follower_conf,
+                v_follower_term_commit_index
+           >>
+    ELSE
+        _IgnoreMessage(_node_id, message, _enable_action, _enable_ignore)   
+          
+HandleAppendLogResp(_node_id, message, _node_id_set, _check_safety, _enable_action, _enable_ignore) ==
+    IF  /\ _InVoteSet(_node_id, v_conf_new[_node_id], v_conf_committed[_node_id])
+        /\ _InLogSet(message.source, v_conf_new[_node_id], v_conf_committed[_node_id])
+    THEN
+        /\ LET from_node_id == message.source
+               payload == message.payload
+               actions0 == ActionSeqSetupAll(_node_id_set)
+               actions1 == ActionCheckState(_node_id)
+               actions2 == Action(ActionInput, message)
+           IN /\ _HandleAppendLogResponse(_node_id, from_node_id, payload, _node_id_set, _check_safety) 
+              /\ SetAction(__action__, actions0, actions1 \o actions2, _enable_action)
+        /\ UNCHANGED <<vars_vote, 
+                v_conf_committed,
+                v_conf_new,
+                v_follower_conf
+            >>
+    ELSE
+        _IgnoreMessage(_node_id, message, _enable_action, _enable_ignore)
     
 RestartNode(i, _node_id, _enable_action) ==
     /\ v_role' = [v_role EXCEPT ![i] = Follower]
@@ -1212,7 +1243,6 @@ RestartNode(i, _node_id, _enable_action) ==
          >>
 
 
-
 _MergeSnapshotEntries(_snapshot_entries_1, _snapshot_entries_2) ==
     LET entries == _snapshot_entries_1 \cup _snapshot_entries_2
         entries_merged == \* left only one value with max index 
@@ -1225,6 +1255,7 @@ _MergeSnapshotEntries(_snapshot_entries_1, _snapshot_entries_2) ==
                   )
             }
     IN entries_merged
+
        
 LogCompaction(nid, _node_id, _enable_action) ==
     /\ v_snapshot[nid].index < v_commit_index[nid]
@@ -1357,72 +1388,70 @@ _UpdateConf(
         [conf_committed |-> c_c, conf_new |-> c_n, term |-> v_current_term[_node_id]]
 
 
-
 \* TLA+ {D240422N-HandleUpdateConfReq}
-HandleUpdateConfReq(_nid, _msg, _nid_set, _enable_action) ==
-    /\ _msg.dest = _nid
-    /\ _msg.name = UpdateConfigReq
-    /\ _InLogSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
-    /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
-    /\(LET conf_committed == _msg.payload.conf_committed
-           conf_new == _msg.payload.conf_new
-           term == _msg.payload.term
-           result == _UpdateConf(_nid, conf_committed, conf_new)
-           term_context == _UpdateTerm(_nid, _msg.payload.term)
-       IN \* only can update config when the term is equal to current term
-          /\ v_current_term[_nid] = term 
-          /\ v_conf_committed' = [v_conf_committed EXCEPT ![_nid] = result.conf_committed]
-          /\ v_conf_new' = [v_conf_new EXCEPT ![_nid] = result.conf_new]
-          /\ LET resp == MsgUpdateConfResp(_msg.dest, _msg.source, 
-                result.term,
-                result.conf_committed.conf_version, 
-                result.conf_new.conf_version
-                ) 
-                actions0 == ActionSeqSetupAll(_nid_set)
-                actions1 == ActionCheckState(_nid)
-                input_action == Action(ActionInput, _msg)
-                output_action == Action(ActionOutput, resp)
-             IN (/\ v_messages' = WithMessage(resp, v_messages)
-                 /\ SetAction(__action__, actions0,   actions1 \o input_action \o output_action, _enable_action)
-                ) 
-      )
-    /\ UNCHANGED <<v_log, v_snapshot, v_history, vars_leader, v_acked_value, v_commit_index,
-            v_role, v_voted_for, v_current_term
-            >>
-
+HandleUpdateConfReq(_nid, _msg, _nid_set, _enable_action, _enable_ignore) ==
+    IF  /\ _InLogSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
+        /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
+        /\ v_current_term[_nid] = _msg.payload.term 
+    THEN /\(LET conf_committed == _msg.payload.conf_committed
+               conf_new == _msg.payload.conf_new
+               term == _msg.payload.term
+               result == _UpdateConf(_nid, conf_committed, conf_new)
+           IN \* only can update config when the term is equal to current term
+              
+              /\ v_conf_committed' = [v_conf_committed EXCEPT ![_nid] = result.conf_committed]
+              /\ v_conf_new' = [v_conf_new EXCEPT ![_nid] = result.conf_new]
+              /\ LET resp == MsgUpdateConfResp(_msg.dest, _msg.source, 
+                    result.term,
+                    result.conf_committed.conf_version, 
+                    result.conf_new.conf_version
+                    ) 
+                    actions0 == ActionSeqSetupAll(_nid_set)
+                    actions1 == ActionCheckState(_nid)
+                    input_action == Action(ActionInput, _msg)
+                    output_action == Action(ActionOutput, resp)
+                 IN (/\ v_messages' = WithMessage(resp, v_messages)
+                     /\ SetAction(__action__, actions0,   actions1 \o input_action \o output_action, _enable_action)
+                    ) 
+          )
+        /\ UNCHANGED <<v_log, v_snapshot, v_history, vars_leader, v_acked_value, v_commit_index,
+                v_role, v_voted_for, v_current_term
+                >>
+    ELSE _IgnoreMessage(_nid, _msg, _enable_action, _enable_ignore)  
+        
 
 \* TLA+ {D240422N-HandleUpdateConfResp}
-HandleUpdateConfResp(_nid, _msg, _nid_set, _enable_action) ==
-    /\ _msg.dest = _nid
-    /\ _msg.name = UpdateConfigResp
-    /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
-    /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
-    /\(LET conf_committed == _msg.payload.conf_committed
-           conf_new == _msg.payload.conf_new
-           term == _msg.payload.term
-           source == _msg.source
-       IN /\ v_current_term[_nid] = term
-          /\ v_role[_nid] = Leader
-          /\ IF \/ v_follower_conf[_nid][source] = NULL
-                \/ v_follower_conf[_nid][source].conf_committed /= conf_committed
-                \/ v_follower_conf[_nid][source].conf_new /= conf_new
-             THEN
-                v_follower_conf' = [v_follower_conf EXCEPT ![_nid][source] = [conf_committed |-> conf_committed, conf_new |-> conf_new]]
-             ELSE
-                UNCHANGED v_follower_conf
-       )
-     /\ LET actions0 == ActionSeqSetupAll(_nid_set)
-            actions1 == ActionCheckState(_nid)
-            input_action == Action(ActionInput, _msg)
-        IN SetAction(__action__, actions0,   actions1 \o input_action, _enable_action)  
-     /\ UNCHANGED <<
-            v_current_term, v_history, v_log, v_messages, v_snapshot, v_voted_for,
-            v_role,
-            vars_vote, vars_replicate,
-            v_follower_term_commit_index,
-            v_conf_committed, v_conf_new
-        >>
-
+HandleUpdateConfResp(_nid, _msg, _nid_set, _enable_action, _enable_ignore) ==
+    IF /\ _InVoteSet(_nid, v_conf_new[_nid], v_conf_committed[_nid])
+        /\ _InLogSet(_msg.source, v_conf_new[_nid], v_conf_committed[_nid])
+        /\ v_current_term[_nid] = _msg.payload.term
+        /\ v_role[_nid] = Leader
+    THEN /\(LET conf_committed == _msg.payload.conf_committed
+               conf_new == _msg.payload.conf_new
+               term == _msg.payload.term
+               source == _msg.source
+           IN /\ IF \/ v_follower_conf[_nid][source] = NULL
+                    \/ v_follower_conf[_nid][source].conf_committed /= conf_committed
+                    \/ v_follower_conf[_nid][source].conf_new /= conf_new
+                 THEN
+                    v_follower_conf' = [v_follower_conf EXCEPT ![_nid][source] = [conf_committed |-> conf_committed, conf_new |-> conf_new]]
+                 ELSE
+                    UNCHANGED v_follower_conf
+           )
+         /\ LET actions0 == ActionSeqSetupAll(_nid_set)
+                actions1 == ActionCheckState(_nid)
+                input_action == Action(ActionInput, _msg)
+            IN SetAction(__action__, actions0,   actions1 \o input_action, _enable_action)  
+         /\ UNCHANGED <<
+                v_current_term, v_history, v_log, v_messages, v_snapshot, v_voted_for,
+                v_role,
+                vars_vote, vars_replicate,
+                v_follower_term_commit_index,
+                v_conf_committed, v_conf_new
+            >>
+    ELSE
+         _IgnoreMessage(_nid, _msg, _enable_action, _enable_ignore) 
+         
 _ConfigVersionEqual(
     _c1,
     _c2
@@ -1488,7 +1517,8 @@ LeaderReConfCommit(_nid, _nid_set, _enable_action) ==
                     v_follower_vote_granted, v_messages, v_history, v_acked_value, 
                     v_conf_new, v_follower_conf, v_follower_term_commit_index
                  >>
-                    
+
+                  
 _CountLimit(_v_count, _type, _max_limit) ==
     IF _max_limit > 100 THEN \* unlimit for > 100
         /\ _v_count' = _v_count
@@ -1496,7 +1526,73 @@ _CountLimit(_v_count, _type, _max_limit) ==
         (/\ _v_count[_type] < _max_limit
          /\ _v_count' = [_v_count EXCEPT ![_type] = _v_count[_type] + 1 ]  
         )
-       
+
+         
+__HandleMessage(
+    m, i, _node_id, 
+    _max_replicate, 
+    _max_vote,
+    _max_reconfig,
+    _check_safety, 
+    _enable_action,
+    _enable_ignore
+    ) ==
+    CASE m.name = AppendRequest -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleAppendReq, _max_replicate)
+        /\ HandleAppendLogReq(i, m, _check_safety, _node_id, _enable_action, _enable_ignore)
+    )
+    [] m.name = AppendResponse -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleAppendResp, _max_replicate)
+        /\ HandleAppendLogResp(i, m, _node_id, _check_safety, _enable_action, _enable_ignore)
+    )
+    [] m.name = ApplyReq -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleApplyReq, _max_replicate)
+        /\ HandleApplySnapshotReq(i, m, _node_id, _enable_action, _enable_ignore)
+    )
+    [] m.name = ApplyResp -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleApplyResp, _max_replicate)
+        /\ HandleApplySnapshotResp(i, m, _node_id, _enable_action, _enable_ignore) 
+    )
+    [] m.name = VoteRequest -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleVoteReq, _max_vote)
+        /\ HandleVoteReq(i, m, _node_id, _enable_action, _enable_ignore)
+    )
+    [] m.name = VoteResponse -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleVoteResp, _max_vote) 
+        /\ HandleVoteResp(i, m, _check_safety, _node_id, _enable_action, _enable_ignore)
+      )
+    [] m.name = UpdateConfigReq -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleUpConfReq, _max_reconfig)
+        /\ HandleUpdateConfReq(i, m, _node_id, _enable_action, _enable_ignore)
+    )
+    [] m.name = UpdateConfigResp -> (
+        /\ _CountLimit(v_cnt_limit, CntHandleUpConfResp, _max_reconfig)
+        /\ HandleUpdateConfResp(i, m, _node_id, _enable_action, _enable_ignore)
+    )
+    [] OTHER -> (
+        {m, "unknown message" }
+    )
+
+_HandleMessage(
+    m, i, _node_id, 
+    _max_replicate, 
+    _max_vote,
+    _max_reconfig,
+    _check_safety, 
+    _enable_action,
+    _enable_ignore
+    ) ==
+    /\ m.dest = i
+    /\ __HandleMessage(
+            m, i, _node_id, 
+            _max_replicate, 
+            _max_vote,
+            _max_reconfig,
+            _check_safety, 
+            _enable_action,
+            _enable_ignore
+            )
+      
 _Next(
     _node_id,
     _value,
@@ -1508,7 +1604,8 @@ _Next(
     _max_restert,
     _max_reconfig,
     _check_safety,
-    _enable_action
+    _enable_action,
+    _enable_ignore
 ) == 
     \/ \E i \in _node_id : 
         \/ (/\ _CountLimit(v_cnt_limit, CntAppendLog, _max_replicate)
@@ -1517,31 +1614,9 @@ _Next(
         \/ (/\ _CountLimit(v_cnt_limit, CntLogCompaction, _max_replicate)
             /\ LogCompaction(i, _node_id, _enable_action)
            )
-        \/ (\E m \in v_messages :
-                \/ ( /\ _CountLimit(v_cnt_limit, CntHandleAppendReq, _max_replicate)
-                     /\ HandleAppendLogReq(i, m, _check_safety, _node_id, _enable_action)
-                   )
-                \/ (/\ _CountLimit(v_cnt_limit, CntHandleAppendResp, _max_replicate)
-                    /\ HandleAppendLogResp(i, m, _node_id, _check_safety, _enable_action)
-                     
-                   )
-                \/ ( /\ _CountLimit(v_cnt_limit, CntHandleApplyReq, _max_replicate)
-                     /\ HandleApplySnapshotReq(i, m, _node_id, _enable_action)
-                    )
-                \/ ( /\ _CountLimit(v_cnt_limit, CntHandleApplyResp, _max_replicate)
-                     /\ HandleApplySnapshotResp(i, m, _node_id, _enable_action)
-                    )
-            )
         \/ (/\ _CountLimit(v_cnt_limit, CntVoteReq, _max_vote)
                 /\ VoteRequestVote(i, _max_term, _check_safety, _node_id, _enable_action)
                )
-        \/ (\E m \in v_messages :
-                \/ (/\ _CountLimit(v_cnt_limit, CntHandleVoteReq, _max_vote)
-                    /\ HandleVoteReq(i, m, _node_id, _enable_action)
-                   )
-                \/ (/\ _CountLimit(v_cnt_limit, CntHandleVoteResp, _max_vote) 
-                    /\ HandleVoteResp(i, m, _check_safety, _node_id, _enable_action))
-           )
         \/ (/\ _CountLimit(v_cnt_limit, CntRestart, _max_restert) 
             /\ RestartNode(i, _node_id, _enable_action)
             )
@@ -1562,15 +1637,13 @@ _Next(
         \/ (/\ _CountLimit(v_cnt_limit, CntReConfCommit, _max_reconfig)
             /\ LeaderReConfCommit(i, _node_id, _enable_action)
            )
-        \/ (/\ _CountLimit(v_cnt_limit, CntHandleUpConfReq, _max_reconfig)
-            /\ \E m \in v_messages :
-                HandleUpdateConfReq(i, m, _node_id, _enable_action)
-           )
-        \/ (/\ _CountLimit(v_cnt_limit, CntHandleUpConfResp, _max_reconfig)
-            /\ \E m \in v_messages :
-                HandleUpdateConfResp(i, m, _node_id, _enable_action)
-           )
-           
+        \/ (\E m \in v_messages :
+                _HandleMessage(m, i, _node_id, 
+                    _max_replicate, 
+                    _max_vote,
+                    _max_reconfig,
+                    _check_safety, _enable_action, _enable_ignore)
+            )
 Init == 
     _Init(
         NODE_ID,
@@ -1592,7 +1665,8 @@ Next ==
         RESTART,
         RECONFIG,
         CHECK_SAFETY,
-        ENABLE_ACTION
+        ENABLE_ACTION,
+        ENABLE_IGNORE
     )
 
 \* to Next.
@@ -1622,6 +1696,7 @@ NextP ==
         0,
         0,
         TRUE,
+        FALSE,
         FALSE
     )
     
@@ -1651,6 +1726,7 @@ AssertStateOK ==
         VALUE,
         MAX_TERM)
 
+
 AssertLogIndexTermGrow ==
     InvLogIndexTermGrow(v_log, v_snapshot, NODE_ID)
             
@@ -1662,16 +1738,15 @@ AssertPrefixCommitted ==
         v_commit_index,
         v_log,
         v_snapshot)
+
         
 AssertAtMostOneLeaderPerTerm ==  
     InvAtMostOneLeaderPerTerm(
           v_history)
-    
-    
+
 AssertFollowerAppend ==    
     InvFollowerAppend(
         v_history)
-
 
 
 AssertLeaderHasAllAckedValues ==

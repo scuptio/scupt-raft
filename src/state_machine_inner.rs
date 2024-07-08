@@ -10,6 +10,7 @@ use tracing::{debug, error, trace};
 use crate::conf_node::ConfNode;
 use crate::conf_value::ConfValue;
 use crate::conf_version::ConfVersion;
+use crate::log_entry::LogEntry;
 use crate::msg_dtm_testing::MDTMTesting;
 use crate::msg_raft_state::MRaftState;
 use crate::node_info::NodeInfo;
@@ -21,7 +22,7 @@ use crate::quorum::{
     quorum_check_term_commit_index,
 };
 use crate::raft_conf::{ConfNodeValue, RaftConf};
-use crate::raft_message::{LogEntry, MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MDTMUpdateConfReq, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage, RCR_ERR_RESP, RCR_OK};
+use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MDTMUpdateConfReq, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage, RCR_ERR_RESP, RCR_OK};
 use crate::raft_role::RaftRole;
 use crate::snapshot::{Snapshot, SnapshotRange};
 use crate::state::RaftState;
@@ -1024,7 +1025,6 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         };
     }
 
-
     async fn handle_append_req(
         &mut self,
         source: NID,
@@ -1383,6 +1383,12 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         Ok((c_committed, c_new, log, index_term, term, voted_for))
     }
 
+    fn update_conf_local(& mut self) {
+        (self.node_set.committed_log, self.node_set.new_log) = self.conf_nid_log();
+        (self.node_set.committed_vote, self.node_set.new_vote) = self.conf_nid_vote();
+        self.node_set.nid_log_all = self.node_set.committed_log.union(&self.node_set.new_log).cloned().collect();
+        self.node_set.nid_vote_all = self.node_set.committed_vote.union(&self.node_set.new_vote).cloned().collect();
+    }
 
     async fn recovery_state(&mut self, storage: &Storage<T>) -> Res<()> {
         let (conf_committed, conf_new,
@@ -1397,10 +1403,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         self.voted_for = voted_for;
         self.conf.update_conf_committed(conf_committed);
         self.conf.update_conf_new(conf_new);
-        (self.node_set.committed_log, self.node_set.new_log) = self.conf_nid_log();
-        (self.node_set.committed_vote, self.node_set.new_vote) = self.conf_nid_vote();
-        self.node_set.nid_log_all = self.node_set.committed_log.union(&self.node_set.new_log).cloned().collect();
-        self.node_set.nid_vote_all = self.node_set.committed_vote.union(&self.node_set.new_vote).cloned().collect();
+        self.update_conf_local();
         self.commit_index = self.snapshot_max_index_term.index;
         Ok(())
     }
@@ -1483,6 +1486,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
             hs.conf_new, value_new);
         self.conf.update_conf_committed(conf_committed);
         self.conf.update_conf_new(conf_new);
+        self.update_conf_local();
         state.non_volatile.operation.push(
             NonVolatileWrite::OpUpConfCommitted {
                 value: self.conf.conf_node_value_committed().value.clone(),
@@ -1703,8 +1707,10 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
 
         // only can update config when the term is equal to current term
         assert_eq!(self.current_term, msg.term);
-        Self::_update_conf(&mut self.conf, msg, state)?;
-
+        let update = Self::_update_conf(&mut self.conf, msg, state)?;
+        if update {
+            self.update_conf_local();
+        }
         let resp = Self::msg_update_conf_resp(
             self.node_id(), source,
             self.current_term,
@@ -1737,14 +1743,17 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
     }
 
     /// TLA+ {D240422N-_UpdateConf}
-    fn _update_conf(conf: &mut RaftConf, msg: MUpdateConfReq, state:&mut RaftState<T>) -> Res<()> {
+    fn _update_conf(conf: &mut RaftConf, msg: MUpdateConfReq, state:&mut RaftState<T>) -> Res<bool> {
+        let mut update = false;
         if conf.conf_node_value_committed().node.conf_version().lt(msg.conf_committed.node.conf_version()) {
             Self::__update_conf::<true>(conf, state, msg.conf_committed);
+            update = true;
         }
         if conf.conf_node_value_new().node.conf_version().lt(msg.conf_new.node.conf_version()) {
             Self::__update_conf::<false>(conf, state, msg.conf_new);
+            update = true;
         }
-        Ok(())
+        Ok(update)
     }
 
     /// TLA+ {D240422N-LeaderReConfBegin}
@@ -1780,7 +1789,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         };
 
         Self::__update_conf::<false>(&mut self.conf, state, conf);
-
+        self.update_conf_local();
         Ok(())
     }
 
@@ -1790,6 +1799,7 @@ impl<T: MsgTrait + 'static> _StateMachineInner<T> {
         if self.can_re_conf_commit()? {
             let conf = self.conf.conf_node_value_new().clone();
             Self::__update_conf::<true>(&mut self.conf, state, conf);
+            self.update_conf_local();
         }
         Ok(())
     }

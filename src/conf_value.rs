@@ -1,6 +1,3 @@
-use std::collections::HashSet;
-
-use arbitrary::Arbitrary;
 use bincode::{Decode, Encode};
 use scupt_util::message::MsgTrait;
 use scupt_util::node_id::NID;
@@ -17,8 +14,7 @@ use crate::node_info::NodeInfo;
     Serialize,
     Deserialize,
     Decode,
-    Encode,
-    Arbitrary
+    Encode
 )]
 pub struct ConfValue {
     pub cluster_name: String,
@@ -65,24 +61,6 @@ impl ConfValue {
             can_vote,
         };
         self.node_peer.push(peer);
-    }
-
-    /// return node id vec pair (`nid_vote`, `nid_log`)
-    ///     `nid_vote`: node that can vote,
-    ///     `nid_log`: node that can only write log but cannot vote
-    pub fn node(&self) -> (Vec<NID>, Vec<NID>) {
-        let mut nid_vote = vec![];
-        let mut nid_log = vec![];
-        let mut hash_set = HashSet::new();
-        for node in self.node_peer.iter() {
-            if node.can_vote {
-                nid_vote.push(node.node_id)
-            }
-            nid_log.push(node.node_id);
-            let exist = hash_set.insert(node.node_id);
-            assert!(!exist, "existing such node {} in {:?}", node.node_id, self.node_peer);
-        }
-        return (nid_vote, nid_log);
     }
 }
 

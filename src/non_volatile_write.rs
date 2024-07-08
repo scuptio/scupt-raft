@@ -4,7 +4,7 @@ use scupt_util::node_id::NID;
 
 use crate::conf_value::ConfValue;
 use crate::conf_version::ConfVersion;
-use crate::raft_message::LogEntry;
+use crate::log_entry::LogEntry;
 use crate::snapshot::SnapshotRange;
 
 #[derive(Clone, Debug)]

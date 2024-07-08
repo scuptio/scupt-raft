@@ -2,15 +2,20 @@
 mod tests {
     use scupt_util::message::{Message, test_check_message};
     use scupt_util::message::MsgTrait;
-    use crate::msg_dtm_testing::MDTMTesting;
+    use scupt_util::mt_map::MTMap;
+    use scupt_util::mt_set::MTSet;
 
-    use crate::msg_raft_state::MRaftState;
-    use crate::node_info::NodeInfo;
     use crate::conf_value::ConfValue;
-
-    use crate::raft_message::{LogEntry, MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage};
+    use crate::conf_version::{ConfVersion, ConfVersionPair};
+    use crate::log_entry::LogEntry;
+    use crate::msg_dtm_testing::{MDTMTesting, MUpdateConf};
+    use crate::msg_raft_state::MRaftState;
+    use crate::node_addr::NodeAddr;
+    use crate::node_info::NodeInfo;
+    use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MClientReq, MClientResp, MUpdateConfReq, MUpdateConfResp, MVoteReq, MVoteResp, PreVoteReq, PreVoteResp, RaftMessage};
     use crate::raft_role::RaftRole;
-    use crate::snapshot::Snapshot;
+    use crate::snapshot::{Snapshot, SnapshotRange};
+    use crate::term_index::TermIndex;
 
     #[test]
     fn test_raft_config() {
@@ -37,7 +42,55 @@ mod tests {
     }
 
     #[test]
+    fn test_term_index() {
+        let vec = vec![TermIndex {
+            term: 0,
+            index: 0,
+        }];
+        test_message(vec);
+    }
+
+    #[test]
+    fn test_snapshot_range() {
+        let vec = vec![SnapshotRange::<i32> {
+            begin_index: 0,
+            end_index: 0,
+            entries: Default::default(),
+        }];
+        test_message(vec);
+    }
+
+    #[test]
+    fn test_addr() {
+        let vec = vec![NodeAddr {
+            node_id: 1,
+            addr: "127.0.0.1".to_string(),
+            port: 35,
+        }];
+        test_message(vec);
+    }
+
+    #[test]
+    fn test_node_info() {
+        let vec = vec![NodeInfo {
+            node_id: 0,
+            can_vote: false,
+        }];
+        test_message(vec);
+    }
+
+
+    #[test]
     fn test_raft_message() {
+        let mut vec = raft_message();
+        let vec2 = dtm_testing_message();
+        for m in vec2 {
+            vec.push(RaftMessage::DTMTesting(m));
+        }
+        test_message(vec);
+    }
+
+    fn raft_message() -> Vec<RaftMessage<i32>> {
         let vec = vec![
             RaftMessage::VoteReq(MVoteReq {
                 term: 0,
@@ -92,75 +145,6 @@ mod tests {
                 request_term: 0,
                 vote_granted: false,
             }),
-            RaftMessage::DTMTesting(MDTMTesting::Check(MRaftState {
-                role: RaftRole::Leader,
-                current_term: 0,
-                log: vec![],
-                snapshot: Default::default(),
-                voted_for: None,
-                follower_vote_granted: Default::default(),
-                commit_index: 0,
-                follower_next_index: Default::default(),
-                follower_match_index: Default::default(),
-                follower_conf: Default::default(),
-                conf_new: Default::default(),
-                conf_committed: Default::default(),
-                follower_term_commit_index: Default::default(),
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::Setup(MRaftState {
-                role: RaftRole::Follower,
-                current_term: 1,
-                log: vec![],
-                snapshot: Default::default(),
-                voted_for: None,
-                follower_vote_granted: Default::default(),
-                commit_index: 2,
-                follower_next_index: Default::default(),
-                follower_match_index: Default::default(),
-                follower_conf: Default::default(),
-                conf_new: Default::default(),
-                conf_committed: Default::default(),
-                follower_term_commit_index: Default::default(),
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::AdvanceCommitIndex(1)),
-            RaftMessage::DTMTesting(MDTMTesting::AppendLog),
-            RaftMessage::DTMTesting(MDTMTesting::BecomeLeader),
-            RaftMessage::DTMTesting(MDTMTesting::ClientWriteLog(1)),
-            RaftMessage::DTMTesting(MDTMTesting::HandleAppendReq(MAppendReq {
-                term: 0,
-                prev_log_index: 0,
-                prev_log_term: 0,
-                log_entries: vec![],
-                commit_index: 0,
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::HandleAppendResp(MAppendResp {
-                term: 0,
-                append_success: false,
-                commit_index: 0,
-                match_index: 0,
-                next_index: 0,
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::HandleVoteReq(MVoteReq {
-                term: 0,
-                last_log_term: 0,
-                last_log_index: 0,
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::HandleVoteResp(MVoteResp {
-                term: 0,
-                vote_granted: false,
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::HandleAppendReq(MAppendReq {
-                term: 0,
-                prev_log_index: 0,
-                prev_log_term: 0,
-                log_entries: vec![],
-                commit_index: 0,
-            })),
-            RaftMessage::DTMTesting(MDTMTesting::HandleApplyResp(MApplyResp {
-                term: 0,
-                match_index: 0,
-                id: "".to_string(),
-            })),
             RaftMessage::ClientReq(MClientReq {
                 id: "".to_string(),
                 value: 2,
@@ -177,10 +161,124 @@ mod tests {
                 error: 0,
                 info: "".to_string(),
             }),
+            RaftMessage::UpdateConfReq(MUpdateConfReq {
+                term: 0,
+                conf_committed: Default::default(),
+                conf_new: Default::default(),
+            }),
+            RaftMessage::UpdateConfResp(MUpdateConfResp {
+                term: 0,
+                conf_committed: Default::default(),
+                conf_new: Default::default(),
+            }),
             RaftMessage::DTMTesting(MDTMTesting::LogCompaction(10)),
             RaftMessage::DTMTesting(MDTMTesting::Restart),
         ];
-        test_message(vec);
+        vec
+    }
+
+    fn dtm_testing_message() -> Vec<MDTMTesting<i32>> {
+        let vec = vec![
+            MDTMTesting::Check(MRaftState {
+                role: RaftRole::Leader,
+                current_term: 0,
+                log: vec![],
+                snapshot: Default::default(),
+                voted_for: None,
+                follower_vote_granted: Default::default(),
+                commit_index: 0,
+                follower_next_index: Default::default(),
+                follower_match_index: Default::default(),
+                follower_conf: MTMap::from_vec(vec![
+                    (1, ConfVersionPair {
+                        conf_committed: ConfVersion {
+                            term: 1,
+                            version: 1,
+                            index: 1,
+                        },
+                        conf_new: ConfVersion {
+                            term: 1,
+                            version: 1,
+                            index: 1,
+                        },
+                    }),
+                    (2, ConfVersionPair {
+                        conf_committed: ConfVersion {
+                            term: 1,
+                            version: 1,
+                            index: 1,
+                        },
+                        conf_new: ConfVersion {
+                            term: 1,
+                            version: 1,
+                            index: 1,
+                        },
+                    }),
+                ]),
+                conf_new: Default::default(),
+                conf_committed: Default::default(),
+                follower_term_commit_index: Default::default(),
+            }),
+            MDTMTesting::Setup(MRaftState {
+                role: RaftRole::Follower,
+                current_term: 1,
+                log: vec![],
+                snapshot: Default::default(),
+                voted_for: None,
+                follower_vote_granted: Default::default(),
+                commit_index: 2,
+                follower_next_index: Default::default(),
+                follower_match_index: Default::default(),
+                follower_conf: Default::default(),
+                conf_new: Default::default(),
+                conf_committed: Default::default(),
+                follower_term_commit_index: Default::default(),
+            }),
+            MDTMTesting::AdvanceCommitIndex(1),
+            MDTMTesting::AppendLog,
+            MDTMTesting::BecomeLeader,
+            MDTMTesting::ClientWriteLog(1),
+            MDTMTesting::HandleAppendReq(MAppendReq {
+                term: 0,
+                prev_log_index: 0,
+                prev_log_term: 0,
+                log_entries: vec![],
+                commit_index: 0,
+            }),
+            MDTMTesting::HandleAppendResp(MAppendResp {
+                term: 0,
+                append_success: false,
+                commit_index: 0,
+                match_index: 0,
+                next_index: 0,
+            }),
+            MDTMTesting::HandleVoteReq(MVoteReq {
+                term: 0,
+                last_log_term: 0,
+                last_log_index: 0,
+            }),
+            MDTMTesting::HandleVoteResp(MVoteResp {
+                term: 0,
+                vote_granted: false,
+            }),
+            MDTMTesting::HandleAppendReq(MAppendReq {
+                term: 0,
+                prev_log_index: 0,
+                prev_log_term: 0,
+                log_entries: vec![],
+                commit_index: 0,
+            }),
+            MDTMTesting::HandleApplyResp(MApplyResp {
+                term: 0,
+                match_index: 0,
+                id: "".to_string(),
+            }),
+            MDTMTesting::UpdateConfBegin(MUpdateConf {
+                nid_vote: MTSet::from_vec(vec![1, 2]),
+                nid_log: MTSet::from_vec(vec![1, 2]),
+            })
+        ];
+        vec
     }
 
     fn test_message<M: MsgTrait + 'static>(vec: Vec<M>) {

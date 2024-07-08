@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::conf_node::ConfNode;
 use crate::conf_version::ConfVersionPair;
-use crate::raft_message::LogEntry;
+use crate::log_entry::LogEntry;
 use crate::raft_role::RaftRole;
 use crate::snapshot::Snapshot;
 use crate::term_index::TermIndex;
