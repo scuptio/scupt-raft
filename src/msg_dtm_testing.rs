@@ -5,7 +5,7 @@ use scupt_util::node_id::NID;
 use serde::{Deserialize, Serialize};
 
 use crate::msg_raft_state::MRaftState;
-use crate::raft_message::{MAppendReq, MAppendResp, MApplyReq, MApplyResp, MDTMUpdateConfReq, MVoteReq, MVoteResp};
+use crate::raft_message::MDTMUpdateConfReq;
 
 #[derive(
     Clone,
@@ -46,18 +46,8 @@ pub enum MDTMTesting<T: MsgTrait + 'static> {
     AppendLog,
     #[serde(bound = "T: MsgTrait")]
     ClientWriteLog(T),
-    HandleVoteReq(MVoteReq),
-    HandleVoteResp(MVoteResp),
-    #[serde(bound = "T: MsgTrait")]
-    HandleAppendReq(MAppendReq<T>),
-    HandleAppendResp(MAppendResp),
-    UpdateTerm(u64),
     Restart,
     LogCompaction(u64),
-    AdvanceCommitIndex(u64),
-    #[serde(bound = "T: MsgTrait")]
-    HandleApplyReq(MApplyReq<T>),
-    HandleApplyResp(MApplyResp),
     UpdateConfBegin(MUpdateConf),
     UpdateConfCommit,
     SendUpdateConf,

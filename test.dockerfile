@@ -16,13 +16,8 @@ RUN rustup component add llvm-tools-preview
 RUN rustup update
 RUN cargo install grcov
 
-ENV PATH /root/.cargo/bin/:$PATH
-
 RUN mkdir -p /root/scupt-raft
 WORKDIR /root/scupt-raft
-
-# invalid the cache
-COPY . .
 
 ENV RUSTFLAGS="-Cinstrument-coverage"
 ENV LLVM_PROFILE_FILE="scupt-raft-%p-%m.profraw"
