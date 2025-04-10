@@ -46,7 +46,7 @@ TLA+ verified Raft consensus
    
    Write test code
    
-   Example [test_raft.rs](src/test_raft_1n.rs)
+   Example [test_raft_dtm.rs](src/test_raft_dtm.rs)
 
 ## Test Coverage
 

@@ -234,49 +234,18 @@ mod tests {
                 conf_committed: Default::default(),
                 follower_term_commit_index: Default::default(),
             }),
-            MDTMTesting::AdvanceCommitIndex(1),
+
             MDTMTesting::AppendLog,
             MDTMTesting::BecomeLeader,
             MDTMTesting::ClientWriteLog(1),
-            MDTMTesting::HandleAppendReq(MAppendReq {
-                term: 0,
-                prev_log_index: 0,
-                prev_log_term: 0,
-                log_entries: vec![],
-                commit_index: 0,
-            }),
-            MDTMTesting::HandleAppendResp(MAppendResp {
-                term: 0,
-                append_success: false,
-                commit_index: 0,
-                match_index: 0,
-                next_index: 0,
-            }),
-            MDTMTesting::HandleVoteReq(MVoteReq {
-                term: 0,
-                last_log_term: 0,
-                last_log_index: 0,
-            }),
-            MDTMTesting::HandleVoteResp(MVoteResp {
-                term: 0,
-                vote_granted: false,
-            }),
-            MDTMTesting::HandleAppendReq(MAppendReq {
-                term: 0,
-                prev_log_index: 0,
-                prev_log_term: 0,
-                log_entries: vec![],
-                commit_index: 0,
-            }),
-            MDTMTesting::HandleApplyResp(MApplyResp {
-                term: 0,
-                match_index: 0,
-                id: "".to_string(),
+            MDTMTesting::UpdateConfBegin(MUpdateConf {
+                nid_vote: MTSet::from_vec(vec![1, 2]),
+                nid_log: MTSet::from_vec(vec![1, 2]),
             }),
             MDTMTesting::UpdateConfBegin(MUpdateConf {
                 nid_vote: MTSet::from_vec(vec![1, 2]),
                 nid_log: MTSet::from_vec(vec![1, 2]),
-            })
+            }),
         ];
         vec
     }
